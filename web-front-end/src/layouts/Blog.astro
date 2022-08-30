@@ -1,0 +1,30 @@
+---
+export interface Props {
+    title: string;
+}
+
+const { title, description } = Astro.props.frontmatter || Astro.props;
+import "../assets/base.css";
+import Footer from "../components/footer.astro";
+import NavBar from "../components/navbar";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+        {description && <meta name="description" content={description} />}
+        <title>{title} | Google Ads Open Research</title>
+    </head>
+    <body class="min-h-screen bg-brandNeutral">
+        <NavBar client:idle />
+        <div class="prose prose-xl mx-auto my-12">
+            <slot />
+        </div>
+        <aside id="right-sidebar" class="sidebar"></aside>
+        <Footer />
+    </body>
+</html>

@@ -1,0 +1,39 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import NavBar from "../../components/navbar";
+import MassiveTitleContainer from "../../components/typography/massiveTitleContainer.astro";
+import NormalText from "../../components/typography/normalText.astro";
+import BlogCard from "../../components/blogCard.astro";
+const posts = await Astro.glob("./*.md");
+
+console.log("posts are", posts);
+---
+
+<NavBar client:idle />
+
+<Layout title="Google Ads Research">
+    <div class="wide-container my-8">
+        <MassiveTitleContainer>
+            <h1 class="text-center font-bold">Google Ads Research</h1>
+        </MassiveTitleContainer>
+        <NormalText
+            ><p class="text-center mt-8">
+                Open source code and research to enable Google Ads marketers
+            </p>
+        </NormalText>
+        <div class="max-w-[800px] mx-auto my-14">
+            {
+                posts.map((post) => {
+                    return (
+                        <BlogCard
+                            Headline={post.frontmatter.headline}
+                            Description={post.frontmatter.description}
+                            Image={post.frontmatter.image}
+                            Link={post.url}
+                        />
+                    );
+                })
+            }
+        </div>
+    </div>
+</Layout>
