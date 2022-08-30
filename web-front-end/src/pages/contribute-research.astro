@@ -1,0 +1,18 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Contact from "../components/contact";
+import NavBar from "../components/navbar";
+---
+
+<NavBar client:load />
+<Layout title="Contribute Research">
+    <div class="wide-column">
+        <Contact
+            Description="Have something others would find useful? We'd love to feature it!"
+            Headline="Contribute Research or Code"
+            ButtonText="Submit Your Contribute"
+            FormPlaceholder="What do you have in mind?"
+            client:idle
+        />
+    </div>
+</Layout>

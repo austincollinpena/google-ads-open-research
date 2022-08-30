@@ -1,0 +1,18 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Contact from "../components/contact";
+import NavBar from "../components/navbar";
+---
+
+<NavBar client:load />
+<Layout title="Request Research">
+    <div class="wide-column">
+        <Contact
+            Description="Have a specific Google Ads idea you want researched? Have an analytics tool in mind? Let us know here!"
+            Headline="Request Research or Code"
+            ButtonText="Submit Your Request"
+            FormPlaceholder="What do you have in mind?"
+            client:idle
+        />
+    </div>
+</Layout>

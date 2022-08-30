@@ -1,0 +1,18 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Contact from "../components/contact";
+import NavBar from "../components/navbar";
+---
+
+<NavBar client:load />
+<Layout title="Request Research">
+    <div class="wide-column">
+        <Contact
+            Description="Questions? Comments? Sponsorship request? Reach out to us here."
+            Headline="Contact Us"
+            ButtonText="Reach Out"
+            FormPlaceholder="How can we help?"
+            client:idle
+        />
+    </div>
+</Layout>

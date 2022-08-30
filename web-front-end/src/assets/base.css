@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer utilities {
+    .wide-container{
+        @apply container px-4 mx-auto
+    }
+}

@@ -1,0 +1,14 @@
+---
+import { AddStringIfExists } from "../../utils/addStringIfExists";
+import type { TypeProps } from "./props";
+export interface Props extends TypeProps {}
+const { ExtraClasses } = Astro.props as Props;
+---
+
+<div
+    class={"text-2xl sm:text-3xl !leading-snug lg:text-[48px] " +
+        " " +
+        AddStringIfExists(ExtraClasses)}
+>
+    <slot />
+</div>

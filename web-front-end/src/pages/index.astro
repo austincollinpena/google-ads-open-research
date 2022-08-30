@@ -1,0 +1,123 @@
+---
+import Layout from "../layouts/Layout.astro";
+import NavBar from "../components/navbar";
+import MassiveTitleContainer from "../components/typography/massiveTitleContainer.astro";
+import MediumText from "../components/typography/mediumText.astro";
+import SecondaryTitle from "../components/typography/secondaryTitle.astro";
+import NormalText from "../components/typography/normalText.astro";
+import BlogCard from "../components/blogCard.astro";
+---
+
+<div class="bg-brandNeutral">
+	<NavBar client:load />
+
+	<Layout title="Welcome to Astro.">
+		<main>
+			<div class="flex flex-col lg:grid grid-cols-12 grid-rows-1">
+				<div class="col-start-1 col-end-10 flex flex-col">
+					<div class="border-4 border-black py-16 -mt-2">
+						<div class="max-w-[713px] mx-4 xl:mx-auto">
+							<MassiveTitleContainer>
+								<h1 class="font-bold">
+									Open-Sourced Analytics Code and Research For
+									Google Advertisers
+								</h1>
+							</MassiveTitleContainer>
+						</div>
+					</div>
+					<div
+						class="bg-brandNeutral-dark border-4 border-black -mt-2 flex md:flex-row flex-col justify-center"
+					>
+						<div
+							class="flex flex-col items-center py-12 border-b-4 md:border-r-4 border-black flex-1 px-4 md:px-8 space-y-4 text-center"
+						>
+							<SecondaryTitle>
+								<h2 class="font-bold text-center">
+									View the Code
+								</h2>
+							</SecondaryTitle>
+							<NormalText ExtraClasses={"max-w-[400px]"}
+								>Open source code ready to optimize your account</NormalText
+							>
+							<a
+								class="font-bold text-white text-center bg-black px-8 py-2"
+								>Read More</a
+							>
+						</div>
+						<div
+							class="flex flex-col items-center py-12 flex-1 px-4 md:px-8 space-y-4 text-center"
+						>
+							<SecondaryTitle>
+								<h2 class="font-bold text-center">
+									Request Research
+								</h2>
+							</SecondaryTitle>
+							<NormalText ExtraClasses={"max-w-[400px]"}
+								>Request code to optimize an account or research
+								on optimization</NormalText
+							>
+							<NormalText>
+								<a
+									href="/request-research"
+									class="font-bold text-center underline text-black px-8 py-2"
+									>Request Research</a
+								>
+							</NormalText>
+						</div>
+					</div>
+					<div class="border-4 border-black -mb-1 -mt-1 pb-12">
+						<SecondaryTitle>
+							<p class="font-bold text-center my-12">Best Of</p>
+						</SecondaryTitle>
+						<div class="max-w-[780px] px-4 mx-auto space-y-8">
+							<BlogCard
+								Headline="Taking N-Gram Analysis Further"
+								Description="Improve search term effeciency with this upgraded n gram analysis script"
+								Image="/ngram-picture.png"
+								Link="/research/ngram-analysis"
+							/>
+							<BlogCard
+								Headline="Run Serverside Google Optimize Tests With Cloudflare Workers"
+								Description="Google Optimize without the lag? Yes please."
+								Image="/ngram-picture.png"
+								Link="/research/ngram-analysis"
+							/>
+							<BlogCard
+								Headline="Get keyword and n-gram level data from ad tests"
+								Description="Ad tests affect different keywords unevenly. Find how your ad test is influencing keyword level performance"
+								Image="/ngram-picture.png"
+								Link="/research/ngram-analysis"
+							/>
+							<BlogCard
+								Headline="Analyze your Youtube Headline Performance"
+								Description="Improve CTR by aggregating and analyzing your Youtube headline performance"
+								Image="/ngram-picture.png"
+								Link="/research/ngram-analysis"
+							/>
+						</div>
+					</div>
+				</div>
+				<div class="col-start-10 col-end-13 flex flex-col px-4">
+					<div class="max-w-[400px] pb-8 xl:w-[280px] mx-auto mt-8">
+						<MediumText>
+							<p class="font-black mb-4">About</p>
+						</MediumText>
+						<img
+							class="mb-4"
+							loading="lazy"
+							alt="austin pena headshot"
+							src="/austin_pena_headshot.jpg"
+						/>
+						<MediumText>
+							Founded by Austin Pena, <i
+								>Google Ads Open Research</i
+							>
+							enables technical marketers to quickly make meaningful
+							changes on accounts.
+						</MediumText>
+					</div>
+				</div>
+			</div>
+		</main>
+	</Layout>
+</div>
