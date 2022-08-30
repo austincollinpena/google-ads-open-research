@@ -43,7 +43,7 @@ const resources = [
     name: "Code",
     description:
       "Learn how to maximize our platform to get the most out of it.",
-    href: "#",
+    href: "/research",
     icon: BookmarkSquareIcon,
   },
 ];
@@ -142,13 +142,13 @@ export default function Example() {
             </Popover>
 
             <a
-              href="#"
+              href="/about"
               className="text-base font-medium text-gray-500 hover:text-gray-900"
             >
               About
             </a>
             <a
-              href="#"
+              href="/contact"
               className="text-base font-medium text-gray-500 hover:text-gray-900"
             >
               Contact
@@ -210,7 +210,7 @@ export default function Example() {
             <div className="space-y-6 py-6 px-5">
               <div className="grid grid-cols-2 gap-y-4 gap-x-8">
                 <a
-                  href="#"
+                  href="/about"
                   className="text-base font-medium text-gray-900 hover:text-gray-700"
                 >
                   About

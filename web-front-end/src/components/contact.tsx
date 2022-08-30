@@ -1,4 +1,5 @@
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/24/outline/index.js";
+import { useState, useRef } from "react";
 
 export type Props = {
   Headline: string;
@@ -7,7 +8,56 @@ export type Props = {
   ButtonText: string;
 };
 
-export default function Example(props: Props) {
+export default function Contact(props: Props) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [formSuccess, setFormSuccess] = useState(false);
+  const formRef = useRef<null | HTMLFormElement>(null);
+
+  const submit = (e: any) => {
+    e.preventDefault();
+
+    const valid = formRef.current?.reportValidity();
+
+    if (!valid) {
+      return;
+    }
+
+    const formObject = {
+      name: name,
+      email: email,
+      message: message,
+    };
+
+    // @ts-ignore
+    const formBody: any = Object.keys(formObject)
+      .map(
+        (key) =>
+          // @ts-ignore
+          encodeURIComponent(key) + "=" + encodeURIComponent(formObject[key])
+      )
+      .join("&");
+
+    fetch("https://form-email.easylanding.io/google-ads-open-research", {
+      method: "Post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+      },
+      body: formBody,
+    })
+      .catch((e) => {
+        window.alert("form submission failed, email me directly");
+      })
+      .finally(() => {
+        setName("");
+        setEmail("");
+        setMessage("");
+        setFormSuccess(true);
+      });
+    return;
+  };
+
   return (
     <div className="relative bg-white">
       <div className="absolute inset-0">
@@ -46,7 +96,10 @@ export default function Example(props: Props) {
         </div>
         <div className="bg-white py-16 px-4 sm:px-6 lg:col-span-3 lg:py-24 lg:px-8 xl:pl-12">
           <div className="mx-auto max-w-lg lg:max-w-none">
-            <form action="#" method="POST" className="grid grid-cols-1 gap-y-6">
+            <form
+              onSubmit={(e) => submit(e)}
+              className="grid grid-cols-1 gap-y-6"
+            >
               <div>
                 <label htmlFor="full-name" className="sr-only">
                   Full name
@@ -55,9 +108,12 @@ export default function Example(props: Props) {
                   type="text"
                   name="full-name"
                   id="full-name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   autoComplete="name"
                   className="block w-full rounded-md border border-gray-300 py-3 px-4 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                   placeholder="Full name"
+                  required
                 />
               </div>
               <div>
@@ -66,11 +122,14 @@ export default function Example(props: Props) {
                 </label>
                 <input
                   id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   name="email"
                   type="email"
                   autoComplete="email"
                   className="block w-full rounded-md border border-gray-300 py-3 px-4 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                   placeholder="Email"
+                  required
                 />
               </div>
               <div>
@@ -80,10 +139,12 @@ export default function Example(props: Props) {
                 <textarea
                   id="message"
                   name="message"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
                   rows={4}
                   className="block w-full rounded-md border border-gray-300 py-3 px-4 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                   placeholder={props.FormPlaceholder}
-                  defaultValue={""}
+                  required
                 />
               </div>
               <div>
@@ -95,6 +156,11 @@ export default function Example(props: Props) {
                 </button>
               </div>
             </form>
+            {formSuccess && (
+              <p className="text-xl text-green-700 mt-2">
+                Successfully submitted, we'll reach out ASAP
+              </p>
+            )}
           </div>
         </div>
       </div>
