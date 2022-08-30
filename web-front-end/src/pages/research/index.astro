@@ -4,9 +4,7 @@ import NavBar from "../../components/navbar";
 import MassiveTitleContainer from "../../components/typography/massiveTitleContainer.astro";
 import NormalText from "../../components/typography/normalText.astro";
 import BlogCard from "../../components/blogCard.astro";
-const posts = await Astro.glob("./*.md");
-
-console.log("posts are", posts);
+const posts = await Astro.glob("./*.mdx");
 ---
 
 <NavBar client:idle />
