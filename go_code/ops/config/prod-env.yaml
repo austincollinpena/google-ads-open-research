@@ -1,0 +1,6 @@
+allowedOrigins: [
+    "googleadsopenresearch.com"
+]
+serveServerFrom: "0.0.0.0:8080"
+
+

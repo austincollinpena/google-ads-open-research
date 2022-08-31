@@ -1,0 +1,2 @@
+allowedOrigins: ["http://app.localhost.com", "http://api.localhost.com", "http://localhost:8050", "http://admin.localhost.com", "http://localhost:3000"]
+serveServerFrom: "localhost:8080"
