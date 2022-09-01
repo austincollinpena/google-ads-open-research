@@ -4,6 +4,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/python_code" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/web-front-end" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.9 (ga-open-39)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

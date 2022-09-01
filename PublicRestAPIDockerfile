@@ -1,6 +1,6 @@
 # docker build -f PublicRestAPIDockerfile -t us-central1-docker.pkg.dev/totemic-fact-361111/go-services/rest_api:latest .
 # docker push us-central1-docker.pkg.dev/totemic-fact-361111/go-services/rest_api:latest
-# gcloud run deploy go-public-api --image=us-central1-docker.pkg.dev/totemic-fact-361111/go-services/rest_api:latest --platform="managed" --region="us-central1" --project="totemic-fact-361111"
+# gcloud run deploy rest-api --image=us-central1-docker.pkg.dev/totemic-fact-361111/go-services/rest_api:latest --platform="managed" --region="us-central1" --project="totemic-fact-361111"
 
 
 FROM golang:latest as build_base
