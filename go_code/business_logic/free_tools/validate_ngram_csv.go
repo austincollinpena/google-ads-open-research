@@ -1,10 +1,9 @@
 package free_tools
 
 type NgramArgs struct {
-	RoaSTarget int    `json:"roas_target" validate:"required"`
-	Name       string `json:"name" validate:"required"`
-	FileName   string `json:"file_name" validate:"required"`
-	Email      string `json:"email" validate:"required,email"`
+	RoaSTarget   float64 `json:"target" validate:"required"`
+	Email        string  `json:"email" validate:"required,email"`
+	IsROASTarget bool    `json:"isROASTarget"`
 }
 
 type NgramUpload struct {

@@ -1,4 +1,4 @@
-package rest_api
+package public_rest_api
 
 import (
 	"encoding/json"

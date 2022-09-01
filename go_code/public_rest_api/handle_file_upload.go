@@ -1,4 +1,4 @@
-package rest_api
+package public_rest_api
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 )
 
 // ProcessCSVUpload a CSV from a request
-func ProcessCSVUpload(r *http.Request, formKey string, targetStruct any) error {
+func ProcessCSVUpload[T any](r *http.Request, formKey string, targetStruct *[]T) error {
 	err := r.ParseForm()
 	if err != nil {
 		return errors.Wrap(err, "processing file")
@@ -22,7 +22,7 @@ func ProcessCSVUpload(r *http.Request, formKey string, targetStruct any) error {
 	if err != nil {
 		return errors.Wrap(err, "reading csv file")
 	}
-	err = csvutil.Unmarshal(data, &targetStruct)
+	err = csvutil.Unmarshal(data, targetStruct)
 	if err != nil {
 		return errors.Wrap(err, "decoding csv file")
 	}

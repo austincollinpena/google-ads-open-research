@@ -1,6 +1,6 @@
 module github.com/austincollinpena/google-ads-open-research
 
-go 1.18
+go 1.19
 
 require (
 	cloud.google.com/go/cloudtasks v1.4.0

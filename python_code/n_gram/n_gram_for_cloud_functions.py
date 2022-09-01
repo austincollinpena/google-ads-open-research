@@ -171,7 +171,8 @@ def create_excel_file(all_ngram_data, account_name, save_locally=True):
             print("saving2")
             wb.save(tmp.name)
             tmp.seek(0)
-            upload_file(f'{account_name}-{uuid.uuid4()}.xlsx', tmp, 'access-cloud-storage-buckets', 'temporary-ads-data-storage')
+            file_name = f'{account_name}-{uuid.uuid4()}.xlsx'
+            upload_file(file_name, tmp, 'access-cloud-storage-buckets', 'temporary-ads-data-storage')
 
 
 def n_gram_for_cloud_functions(roas_target, data_for_analysis, account_name, save_locally):

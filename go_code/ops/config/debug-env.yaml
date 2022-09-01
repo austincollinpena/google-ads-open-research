@@ -1,2 +1,4 @@
 allowedOrigins: ["http://app.localhost.com", "http://api.localhost.com", "http://localhost:8050", "http://admin.localhost.com", "http://localhost:3000"]
-serveServerFrom: "localhost:8080"
+serveServerFrom: "localhost:8075"
+pythonAnalyticsServer: "http://127.0.0.1:5000"
+prod: false

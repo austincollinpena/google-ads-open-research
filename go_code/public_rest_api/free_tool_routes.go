@@ -1,4 +1,4 @@
-package rest_api
+package public_rest_api
 
 import (
 	"encoding/json"
@@ -7,7 +7,6 @@ import (
 	"github.com/austincollinpena/google-ads-open-research/go_code/ops/validate"
 	"github.com/go-chi/chi/v5"
 	"github.com/pkg/errors"
-	"io"
 	"net/http"
 	"net/mail"
 )
@@ -19,32 +18,38 @@ func freeToolRoutes() *chi.Mux {
 }
 
 func Ngram(w http.ResponseWriter, r *http.Request) {
-	readBody, err := io.ReadAll(r.Body)
-	defer r.Body.Close()
+	err := r.ParseMultipartForm(52428800000000000)
 	if err != nil {
-		error_reporting.ReportError(errors.Wrap(err, "reading body ngram"))
-		w.WriteHeader(400)
+		error_reporting.ReportError(errors.Wrap(err, "parsing form"))
+		APIErr(w, r, err.Error())
 		return
 	}
+	stringifiedArgs := r.Form.Get("args")
 	var n free_tools.NgramArgs
-	err = json.Unmarshal(readBody, &n)
+	err = json.Unmarshal([]byte(stringifiedArgs), &n)
 	if err != nil {
 		error_reporting.ReportError(errors.Wrap(err, "parsing struct body"))
-		w.WriteHeader(400)
+		APIErr(w, r, err.Error())
 		return
 	}
 	err = validate.AppValidator.Struct(n)
 	if err != nil {
+		error_reporting.ReportError(errors.Wrap(err, "validating"))
 		APIErr(w, r, err.Error())
 		return
 	}
 	var ngramStruct []free_tools.NgramUpload
-	err = ProcessCSVUpload(r, "csv", &ngramStruct)
+	err = ProcessCSVUpload(r, "csvData", &ngramStruct)
 	if err != nil {
 		APIErr(w, r, err.Error())
 		return
 	}
-
+	err = free_tools.QueueNGramAnalysis(n, ngramStruct)
+	if err != nil {
+		error_reporting.ReportError(errors.Wrap(err, "queue ngram"))
+		APIErr(w, r, err.Error())
+		return
+	}
 }
 
 func validMailAddress(address string) (string, bool) {

@@ -24,7 +24,7 @@ func SaveToGCP(b []byte, path string) error {
 		return err
 	}
 	// Save it to the set destination
-	wc := Client.Bucket("temporary-ads-data-storage").Object(fmt.Sprintf("static/%s", path)).NewWriter(ctx)
+	wc := Client.Bucket("temporary-ads-data-storage").Object(fmt.Sprintf("%s", path)).NewWriter(ctx)
 	if _, err := io.Copy(wc, bytes.NewReader(b)); err != nil {
 		return err
 	}

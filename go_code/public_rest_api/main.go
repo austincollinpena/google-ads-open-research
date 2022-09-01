@@ -1,4 +1,4 @@
-package rest_api
+package public_rest_api
 
 import (
 	"github.com/austincollinpena/google-ads-open-research/go_code/ops/config"
@@ -14,25 +14,35 @@ import (
 func Routes() *chi.Mux {
 	router := chi.NewRouter()
 	router.Use(
-		middleware.Compress(5),
+		//middleware.Compress(5),
 		middleware.Heartbeat("/health-check"),
 		middleware.Recoverer,
+		middleware.Logger,
 		cors.New(cors.Options{
-			AllowedOrigins:   viper.GetStringSlice("allowedOrigins"),
+			AllowedOrigins: viper.GetStringSlice("allowedOrigins"),
+			//AllowedOrigins:   []string{"*"},
 			AllowCredentials: true,
 			Debug:            true,
-			//AllowedHeaders:   []string{"Content-Type", "Sentry-Trace", "X-CSRF-Token"},
-			AllowedHeaders: []string{"*"},
-			MaxAge:         300,
-			ExposedHeaders: []string{"*"},
-			AllowedMethods: []string{"GET", "PATCH", "POST"},
+			AllowedHeaders:   []string{"*"},
+			MaxAge:           30000,
+			ExposedHeaders:   []string{"*"},
+			AllowedMethods:   []string{"GET", "PATCH", "POST"},
 		}).Handler,
 		middleware.RedirectSlashes,
+		//maxBytes,
 	)
 	router.Route("/v1", func(r chi.Router) {
-		r.Mount("/api/group", freeToolRoutes())
+		r.Mount("/api/free-tools", freeToolRoutes())
 	})
 	return router
+}
+
+func maxBytes(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// As an example, limit post body to 10 bytes
+		r.Body = http.MaxBytesReader(w, r.Body, 52428800000000000)
+		next.ServeHTTP(w, r)
+	})
 }
 
 func RunServer() {
@@ -52,7 +62,9 @@ func RunServer() {
 		IdleTimeout:       10 * time.Second,
 		Addr:              viper.GetString("serveServerFrom"),
 		Handler:           router,
+		MaxHeaderBytes:    5242880000,
 	}
+
 	err := s.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)

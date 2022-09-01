@@ -9,7 +9,7 @@ import (
 
 // CreateHTTPTaskWithToken constructs a task with a authorization token
 // and HTTP target then adds it to a Queue.
-func CreateHTTPTaskWithToken(projectID string, locationID string, queueID string, url string, email string, message string, body []byte) (*taskspb.Task, error) {
+func CreateHTTPTaskWithToken(projectID string, locationID string, queueID string, url string, email string, body []byte) (*taskspb.Task, error) {
 	// Create a new Cloud Tasks client instance.
 	// See https://godoc.org/cloud.google.com/go/cloudtasks/apiv2
 	ctx := context.Background()
@@ -49,8 +49,6 @@ func CreateHTTPTaskWithToken(projectID string, locationID string, queueID string
 			},
 		},
 	}
-
-	logging.Logger.Info().Msg("req created")
 
 	// Add a payload message if one is present.
 	req.Task.GetHttpRequest().Body = body

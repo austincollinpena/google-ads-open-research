@@ -21,9 +21,7 @@ import NavBar from "../components/navbar";
   </head>
   <body class="min-h-screen bg-brandNeutral">
     <NavBar client:idle />
-    <div class="prose prose-xl mx-auto my-12">
-      <slot />
-    </div>
+    <slot />
     <aside id="right-sidebar" class="sidebar"></aside>
     <Footer />
   </body>

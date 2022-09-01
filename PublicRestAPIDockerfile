@@ -1,0 +1,37 @@
+# docker build -f PublicRestAPIDockerfile -t us-central1-docker.pkg.dev/totemic-fact-361111/go-services/rest_api:latest .
+# docker push us-central1-docker.pkg.dev/totemic-fact-361111/go-services/rest_api:latest
+# gcloud run deploy go-public-api --image=us-central1-docker.pkg.dev/totemic-fact-361111/go-services/rest_api:latest --platform="managed" --region="us-central1" --project="totemic-fact-361111"
+
+
+FROM golang:latest as build_base
+
+ARG app_env
+ENV APP_ENV $app_env
+ENV CGO_ENABLED=0
+ENV GET_FILE=root
+
+
+COPY go_code/ /go/src/github.com/austincollinpena/google-ads-open-research/go_code
+
+WORKDIR /go/src/github.com/austincollinpena/google-ads-open-research/go_code/cmd/public_rest_api
+
+COPY go.mod ../../../
+COPY go.sum ../../../
+
+
+RUN go get
+
+RUN go build -o /tmp/go_public_api
+
+FROM alpine:latest
+
+#ENV config=prod-env
+ENV config=prod-env
+ENV GET_FILE=root
+
+COPY --from=build_base /tmp/go_public_api /app/go_public_api
+
+EXPOSE 8080
+
+
+ENTRYPOINT ["/app/go_public_api"]
