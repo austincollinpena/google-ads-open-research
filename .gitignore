@@ -1,9 +1,10 @@
 analysis_packages/n_gram/git_ignored_data/*
 !analysis_packages/n_gram/git_ignored_data/processed_files/.gitkeep
 
+git_ignored_data/
+
 !python_code/n_gram/git_ignored_data/.gitkeep
 !python_code/n_gram/git_ignored_data/processed_files/.gitkeep
-git_ignored_data/
 
 
 service_accounts/
