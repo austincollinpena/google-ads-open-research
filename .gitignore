@@ -3,6 +3,8 @@ analysis_packages/n_gram/git_ignored_data/*
 
 git_ignored_data/
 
+go_code/business_logic/free_tools/git-ignored-data/
+
 !python_code/n_gram/git_ignored_data/.gitkeep
 !python_code/n_gram/git_ignored_data/processed_files/.gitkeep
 

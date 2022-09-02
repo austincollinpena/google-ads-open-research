@@ -3,6 +3,7 @@ import ray
 import unicodedata
 import re
 import pandas as pd
+import collections
 
 
 def basic_clean(text):
@@ -21,7 +22,6 @@ def basic_clean(text):
     return words
     # don't remove stop words
     # return [wnl.lemmatize(word) for word in words if word not in stopwords]
-
 
 
 # Commit 9a1c5a409ef1aba5446c80d18487b811fdd873b2 shows how to use ray for multiprocessing
@@ -49,6 +49,12 @@ def create_dataframe_of_ngram_stats_positive_and_negative(all_search_term_data_d
     return merged
 
 
+def tokenize(string):
+    """Convert string to lowercase and split into words (ignoring
+    punctuation), returning list of words.
+    """
+    return re.findall(r'\w+', string.lower())
+
 # Takes in a dictionary of the n gram dataframe and all the gram vecotrs
 # also takes in more_efficient_search_term_data_dict (which can be empty) that shows the outcome if low ROAS
 # items are excluded
@@ -57,8 +63,21 @@ def create_dataframe_of_ngram_stats(all_search_term_data_dict, gram_vecs):
     # This is where everything is held:
     gram_dict_with_values = {}
 
+    lengths = range(1, 6)
+    ngrams = {length: collections.Counter() for length in lengths}
+    queue = collections.deque(maxlen=6)
+
+    def add_queue():
+        current = tuple(queue)
+        for length in lengths:
+            if len(current) >= length:
+                ngrams[length][current[:length]] += 1
+
+
+
     # loop through all the grams
     for search_term_row in all_search_term_data_dict:
+        
         # loop through the dict and see if the gram is found in the data
         # If it's found the first time
         for gram in gram_vecs:

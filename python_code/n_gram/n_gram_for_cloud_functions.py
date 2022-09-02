@@ -26,7 +26,7 @@ def prepare_data(data_for_analysis):
     search_term_data = pd.read_csv(data_for_analysis, thousands=",", converters={'Impr. (Top) %': p2f, 'Impr. (Abs. Top) %': p2f})
     columns = ['Search term', 'Campaign', 'Ad group', 'Clicks', 'Impr.', 'Cost', 'Conversions', 'Conv. value', 'Impr. (Top) %', 'Impr. (Abs. Top) %']
     search_term_data = search_term_data[columns]
-    # search_term_data = search_term_data[search_term_data['Impr.'] > 5]
+    search_term_data = search_term_data[search_term_data['Impr.'] > 6]
     search_term_data.dropna(subset=['Impr.'], inplace=True)
     return search_term_data
 
@@ -170,7 +170,7 @@ def create_excel_file(all_ngram_data, account_name, save_locally=True):
 
     print("saving")
     if save_locally:
-        wb.save(f'./git_ignored_data/processed_files/{account_name}.xlsx')
+        wb.save(f'./n_gram/git_ignored_data/processed_files/{account_name}.xlsx')
     else:
         with NamedTemporaryFile(delete=False) as tmp:
             print("saving2")
@@ -182,31 +182,27 @@ def create_excel_file(all_ngram_data, account_name, save_locally=True):
 
 def n_gram_for_cloud_functions(roas_target, data_for_analysis, account_name, save_locally):
     try:
-        logging.info("start function")
-        print("start function")
-        tic = time.perf_counter()
-        num_cpus = psutil.cpu_count(logical=False)
-        ray.init(num_cpus=num_cpus)
-        print("prepare search term data")
+
         search_term_data = prepare_data(data_for_analysis)
         print("get all grams")
         all_grams = generate_grams(search_term_data)
         print("removed low value terms")
         low_value_search_terms_excluded = create_negatived_frame(roas_target, search_term_data)
         print("getting ngram data")
+        tic = time.perf_counter()
         all_ngram_data = execute_ngrams(search_term_data, all_grams, low_value_search_terms_excluded)
         print("creating excel file")
-        create_excel_file(all_ngram_data, account_name, save_locally)
+        # create_excel_file(all_ngram_data, account_name, save_locally)
         toc = time.perf_counter()
         print(f"Finished in {toc - tic:0.4f} seconds")
-        ray.shutdown()
-        # Dask: 32.8474
     except Exception as e:
         print(e)
         logging.exception(e)
-        ray.shutdown()
 
+
+# min 6 impressions
+# 19.5021
 
 if __name__ == "__main__":
     os.chdir("../")
-    n_gram_for_cloud_functions(2.2, "./n_gram/git_ignored_data/search_terms.csv", "prolock", False)
+    n_gram_for_cloud_functions(2.2, "./n_gram/git_ignored_data/search_terms.csv", "prolock", True)
