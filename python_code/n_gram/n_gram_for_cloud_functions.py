@@ -26,7 +26,7 @@ def prepare_data(data_for_analysis):
     search_term_data = pd.read_csv(data_for_analysis, thousands=",", converters={'Impr. (Top) %': p2f, 'Impr. (Abs. Top) %': p2f})
     columns = ['Search term', 'Campaign', 'Ad group', 'Clicks', 'Impr.', 'Cost', 'Conversions', 'Conv. value', 'Impr. (Top) %', 'Impr. (Abs. Top) %']
     search_term_data = search_term_data[columns]
-    search_term_data = search_term_data[search_term_data['Impr.'] > 50]
+    # search_term_data = search_term_data[search_term_data['Impr.'] > 5]
     search_term_data.dropna(subset=['Impr.'], inplace=True)
     return search_term_data
 
@@ -94,8 +94,6 @@ def execute_ngrams(search_term_data, all_grams, low_value_search_terms_excluded)
 
     # Loop through the campaign names and create the preconditions for parallel processing
 
-    campaign_processing_ids = []
-
     for campaign_name in all_grams:
 
         # Filter the DF to only the current campaign
@@ -110,19 +108,26 @@ def execute_ngrams(search_term_data, all_grams, low_value_search_terms_excluded)
         all_search_term_data_dict = campaign_df.to_dict('records')
         all_search_term_data_dict_efficient = campaign_df_efficient.to_dict('records')
 
-        result_id = create_dataframe_of_ngram_stats_positive_and_negative.remote(all_search_term_data_dict, all_search_term_data_dict_efficient, all_grams[campaign_name],
-                                                                                 df_columns, campaign_name)
+        # get stats from the n gram (all_grams[campaign_name] gets the n grams)
+        dict_with_ngram_stats = create_dataframe_of_ngram_stats(all_search_term_data_dict, all_grams[campaign_name])
+        dict_with_ngram_stats_efficient = create_dataframe_of_ngram_stats(all_search_term_data_dict_efficient, all_grams[campaign_name])
 
-        campaign_processing_ids.append(result_id)
+        # create the dataframes
+        ngram_analysis_from_search_terms = pd.DataFrame.from_dict(dict_with_ngram_stats, orient='index', columns=df_columns)
+        ngram_analysis_from_search_terms = ngram_analysis_from_search_terms.reset_index().rename(columns={'index': 'Search term'})
 
-    # Wait for the multiprocessing results
-    while len(campaign_processing_ids):
-        done_id, campaign_processing_ids = ray.wait(campaign_processing_ids)
-        merged_finished_df = ray.get(done_id[0])
-        if merged_finished_df.empty:
-            continue
-        campaign_name = merged_finished_df.iloc[0]['campaign']
-        ngram_analysis_dataframes[campaign_name] = merged_finished_df
+        ngram_analysis_from_search_terms_efficient = pd.DataFrame.from_dict(dict_with_ngram_stats_efficient, orient='index', columns=df_columns)
+        ngram_analysis_from_search_terms_efficient = ngram_analysis_from_search_terms_efficient.reset_index().rename(columns={'index': 'Search term'})
+        # merge the dataframes
+
+        merged = ngram_analysis_from_search_terms.merge(ngram_analysis_from_search_terms_efficient, left_on='Search term', right_on='Search term', how='left',
+                                                        suffixes=['', '_efficient'])
+
+        merged.set_index('Search term', inplace=True)
+
+        # Create a new dataframe
+        ngram_analysis_dataframes[campaign_name] = merged
+
         clean_dataframe(campaign_name)
 
     ## Make a doc for the entire account
@@ -176,20 +181,21 @@ def create_excel_file(all_ngram_data, account_name, save_locally=True):
 
 
 def n_gram_for_cloud_functions(roas_target, data_for_analysis, account_name, save_locally):
-    logging.info("start function")
-    tic = time.perf_counter()
-    num_cpus = psutil.cpu_count(logical=False)
-    ray.init(num_cpus=num_cpus)
     try:
-        logging.info("prepare search term data")
+        logging.info("start function")
+        print("start function")
+        tic = time.perf_counter()
+        num_cpus = psutil.cpu_count(logical=False)
+        ray.init(num_cpus=num_cpus)
+        print("prepare search term data")
         search_term_data = prepare_data(data_for_analysis)
-        logging.info("get all grams")
+        print("get all grams")
         all_grams = generate_grams(search_term_data)
-        logging.info("removed low value terms")
+        print("removed low value terms")
         low_value_search_terms_excluded = create_negatived_frame(roas_target, search_term_data)
-        logging.info("getting ngram data")
+        print("getting ngram data")
         all_ngram_data = execute_ngrams(search_term_data, all_grams, low_value_search_terms_excluded)
-        logging.info("creating excel file")
+        print("creating excel file")
         create_excel_file(all_ngram_data, account_name, save_locally)
         toc = time.perf_counter()
         print(f"Finished in {toc - tic:0.4f} seconds")
@@ -203,4 +209,4 @@ def n_gram_for_cloud_functions(roas_target, data_for_analysis, account_name, sav
 
 if __name__ == "__main__":
     os.chdir("../")
-    n_gram_for_cloud_functions(2.2, "./n_gram/git_ignored_data/prolock_three_months.csv", "prolock", False)
+    n_gram_for_cloud_functions(2.2, "./n_gram/git_ignored_data/search_terms.csv", "prolock", False)
