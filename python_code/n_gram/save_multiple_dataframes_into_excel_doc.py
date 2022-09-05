@@ -4,6 +4,7 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 from typing import TypedDict
 from tempfile import NamedTemporaryFile
 import uuid
+from interface_with_gcp.cloud_storage.upload_file import upload_file
 
 
 class DFAndName(TypedDict):
@@ -12,7 +13,8 @@ class DFAndName(TypedDict):
     gram_count: int
 
 
-def save_multiple_dataframes_into_excel_doc(dfs: list[pd.DataFrame], save_locally: bool, account_name: str) -> NamedTemporaryFile:
+# TODO: This takes more time to do than n gram analysis, should be adjusted
+def save_multiple_dataframes_into_excel_doc(dfs: list[pd.DataFrame], save_locally: bool, account_name: str) -> str:
     """
     :param dfs: list of dataframes to save
     :param save_locally: tells the function either save the workbook locally or not
@@ -41,10 +43,11 @@ def save_multiple_dataframes_into_excel_doc(dfs: list[pd.DataFrame], save_locall
 
     if save_locally:
         wb.save(f'./n_gram/git_ignored_data/processed_files/{account_name}.xlsx')
-        return
+        return ""
 
     with NamedTemporaryFile(delete=False) as tmp:
         wb.save(tmp.name)
         tmp.seek(0)
         tmp.name = f'{account_name}-{uuid.uuid4()}.xlsx'
-        return tmp
+        upload_file(tmp.name, tmp, 'access-cloud-storage-buckets', 'temporary-ads-data-storage')
+        return tmp.name

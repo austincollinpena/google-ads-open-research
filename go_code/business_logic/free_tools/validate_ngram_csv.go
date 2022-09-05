@@ -3,7 +3,7 @@ package free_tools
 type NgramArgs struct {
 	RoaSTarget   float64 `json:"target" validate:"required"`
 	Email        string  `json:"email" validate:"required,email"`
-	IsROASTarget bool    `json:"isROASTarget"`
+	IsROASTarget bool    `json:"is_roas_target"`
 }
 
 type NgramUpload struct {

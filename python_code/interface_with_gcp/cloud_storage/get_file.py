@@ -15,7 +15,7 @@ def get_file(service_account_name: str, bucket_name: str, file_name: str):
     return bucket.blob(file_name)
 
 
-def generate_signed_url_for_object(service_account_name: str, bucket_name: str, file_name: str):
+def generate_signed_url_for_object(service_account_name: str, bucket_name: str, file_name: str, minutes=2):
     logging.info("trying to generate for presigned url2")
     print("trying to generate for presigned url")
     json_credentials = return_credentials(service_account_name)
@@ -24,7 +24,7 @@ def generate_signed_url_for_object(service_account_name: str, bucket_name: str, 
     storage_client = storage.Client(credentials=credentials)
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.get_blob(file_name)
-    return blob.generate_signed_url(expiration=(datetime.utcnow() + timedelta(minutes=2)))
+    return blob.generate_signed_url(expiration=(datetime.utcnow() + timedelta(minutes=minutes)))
 
 
 if __name__ == "__main__":

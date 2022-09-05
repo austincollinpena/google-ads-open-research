@@ -9,13 +9,16 @@ export default function NGramUploader() {
   const [email, setEmail] = useState("");
   const [target, setTarget] = useState<number | string>("");
   const [file, setFile] = useState<undefined | File>(undefined);
+  const [loading, setLoading] = useState(false);
   const formRef = useRef<null | HTMLFormElement>(null);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: any) => {
+    e.preventDefault();
     if (!formRef || !file) {
       return;
     }
-    e.preventDefault();
+
     const valid = formRef.current?.reportValidity();
     if (!valid) {
       return;
@@ -24,6 +27,7 @@ export default function NGramUploader() {
       window.alert("please set a target ROAS or CPA");
       return;
     }
+    setLoading(true);
     const formData = new FormData();
     const formBody = {
       email: email,
@@ -37,22 +41,32 @@ export default function NGramUploader() {
         method: "POST",
         body: formData,
         credentials: "include",
-        // headers: {
-        //   "content-type": "multipart/form-data",
-        // },
       })
         .then((r) => {
           if (!r.ok || [400, 401, 402, 403, 404, 500].includes(r.status)) {
             r.json().then((v) => window.alert(v["error_message"]));
             console.log();
+            setLoading(false);
+            setSuccess(true);
+            // @ts-ignore clear the HTML file cache
+            document.querySelector("#upload-file").value = null;
           } else {
-            window.alert("success");
+            setEmail("");
+            setTarget("");
+            setFile(undefined);
+            // @ts-ignore clear the HTML file cache
+            document.querySelector("#upload-file").value = null;
+            setLoading(false);
+            setSuccess(true);
           }
         })
         .catch((e) => {
           window.alert(e);
+          setLoading(false);
+          setSuccess(false);
         });
     } catch (e) {
+      setLoading(false);
       window.alert("something went wrong, please contact us");
     }
   };
@@ -179,9 +193,10 @@ export default function NGramUploader() {
                       </div>
                       <input
                         value={target}
-                        onChange={(e) => setTarget(parseInt(e.target.value))}
+                        onChange={(e) => setTarget(parseFloat(e.target.value))}
                         type="number"
                         name="target"
+                        step=".01"
                         required
                         id="target"
                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -256,11 +271,23 @@ export default function NGramUploader() {
           <div className="flex justify-end mt-4">
             <button
               type="submit"
-              className="ml-3 inline-flex justify-center  border border-transparent bg-black py-2 px-4 text-md mt-4 font-medium text-white shadow-sm hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              disabled={loading}
+              className={`ml-3
+              ${loading && "opacity-70 cursor-wait"}
+              inline-flex justify-center transition-opacity opacity-100 border border-transparent bg-black py-2 px-4 text-md mt-4 font-medium text-white shadow-sm hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
             >
               Generate My Free N Gram Report
             </button>
           </div>
+          {success && (
+            <div className="mt-4 bg-green-50 border-4 border-black py-4 px-2 text-center">
+              <p className="text-green-800">
+                Success, your report is queued and will be sent to the email you
+                provided. Depending on server load, this can take less than two
+                minutes.
+              </p>
+            </div>
+          )}
         </div>
       </form>
     </div>

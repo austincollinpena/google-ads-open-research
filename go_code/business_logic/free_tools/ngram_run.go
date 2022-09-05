@@ -9,7 +9,9 @@ import (
 	"strings"
 )
 
-// RunNGrams is the entrypoint for a python implementation of n grams
+// DEPRECATED: RunNGrams is the entrypoint for a python implementation of n grams
+// I figured out how to use vector operations for everything in python and that implementation ended up being
+// faster
 func RunNGrams(n []NgramUpload) error {
 	// TODO: Convert "imprtop" and "imprabstop" to absolute values
 	df := MarshallColumnsIntoNumbers(n, []string{"Impr", "Clicks", "Cost", "Conversions", "ConversionValue", "ImprTop", "ImprAbsTop"})
