@@ -14,8 +14,12 @@ ENV APP_HOME /app
 WORKDIR $APP_HOME
 COPY . ./
 
+
 RUN pip install Flask gunicorn
 RUN pip install -r requirements.txt
+
+RUN [ "python3", "-c", "import nltk; nltk.download('punkt', download_dir='/usr/local/nltk_data')" ]
+
 
 
 CMD exec gunicorn --bind :$PORT --workers 1 --threads 1 --timeout 0 main:app

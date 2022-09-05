@@ -5,6 +5,8 @@ from typing import TypedDict
 from tempfile import NamedTemporaryFile
 import uuid
 from interface_with_gcp.cloud_storage.upload_file import upload_file
+from pyexcelerate import Workbook
+import random
 
 
 class DFAndName(TypedDict):
@@ -13,7 +15,68 @@ class DFAndName(TypedDict):
     gram_count: int
 
 
-# TODO: This takes more time to do than n gram analysis, should be adjusted
+def save_multiple_dataframes_into_excel_pyexcelerate(dfs: list[pd.DataFrame], save_locally: bool, account_name: str) -> str:
+    file_name = f'{account_name}-{uuid.uuid4()}.xlsx'
+    fast_wb = Workbook()
+    with NamedTemporaryFile(delete=False, prefix='xlsx') as tmp:
+
+        for df in dfs:
+            if df.empty:
+                continue
+
+            campaign_name = df.iloc[0]['Campaign']
+            gram_count = df.iloc[0]['gram_count']
+            df = df.sort_values(by=['n_gram_count'], ascending=False)
+            name = ""
+            if len(campaign_name) > 28:
+                rand_string = ''.join(random.choice([chr(i) for i in range(ord('a'), ord('z'))]) for _ in range(3))
+                name = f'{campaign_name[:24]}-{rand_string}-{gram_count}'
+            else:
+                name = f'{campaign_name}-{gram_count}'
+            name = name.replace("/", "-")
+
+            values = [df.columns] + list(df.values)
+            fast_wb.new_sheet(name, data=values)
+
+        if save_locally:
+            fast_wb.save(file_name)
+        else:
+            fast_wb.save(tmp.name)
+
+        upload_file(file_name, tmp, 'access-cloud-storage-buckets', 'temporary-ads-data-storage')
+        return file_name
+
+
+def save_multiple_dataframes_into_excel_pd_native(dfs: list[pd.DataFrame], save_locally: bool, account_name: str) -> str:
+    file_name = f'{account_name}-{uuid.uuid4()}.xlsx'
+    with NamedTemporaryFile(delete=False, prefix='xlsx') as tmp:
+        if save_locally:
+            writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
+        else:
+            writer = pd.ExcelWriter(tmp.name, engine='xlsxwriter')
+
+        for df in dfs:
+            if df.empty:
+                continue
+
+            campaign_name = df.iloc[0]['Campaign']
+            gram_count = df.iloc[0]['gram_count']
+            df = df.sort_values(by=['n_gram_count'], ascending=False)
+            name = ""
+            if len(campaign_name) > 20:
+                name = f'{campaign_name[0:19]}-{gram_count}-gram'
+            else:
+                name = f'{campaign_name}-{gram_count}-gram'
+            name = name.replace("/", "-")
+            df.to_excel(writer, sheet_name=name)
+
+        writer.save()
+
+        upload_file(file_name, tmp, 'access-cloud-storage-buckets', 'temporary-ads-data-storage')
+        return file_name
+
+
+# This takes about 2x as the other implementation
 def save_multiple_dataframes_into_excel_doc(dfs: list[pd.DataFrame], save_locally: bool, account_name: str) -> str:
     """
     :param dfs: list of dataframes to save

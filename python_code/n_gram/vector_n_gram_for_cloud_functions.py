@@ -1,10 +1,12 @@
 import logging
 
+import nltk
 import pandas as pd
 import os
 import time
 
-from n_gram.save_multiple_dataframes_into_excel_doc import save_multiple_dataframes_into_excel_doc
+from n_gram.save_multiple_dataframes_into_excel_doc import save_multiple_dataframes_into_excel_doc, save_multiple_dataframes_into_excel_pd_native, \
+    save_multiple_dataframes_into_excel_pyexcelerate
 from typing import List
 from pandarallel import pandarallel
 from send_mailgun.send_email import send_email
@@ -21,6 +23,7 @@ def p2f(x):
 # prepare_data reads the csv document and returns with the correct columns
 def prepare_data(data_for_analysis: str, filter_on_roas: bool) -> pd.DataFrame:
     search_term_data = pd.read_csv(data_for_analysis, thousands=",", converters={'Impr. (Top) %': p2f, 'Impr. (Abs. Top) %': p2f})
+
     if filter_on_roas:
         columns = ['Search term', 'Campaign', 'Ad group', 'Clicks', 'Impr.', 'Cost', 'Conversions', 'Conv. value', 'Impr. (Top) %', 'Impr. (Abs. Top) %']
         search_term_data = search_term_data[columns]
@@ -30,6 +33,7 @@ def prepare_data(data_for_analysis: str, filter_on_roas: bool) -> pd.DataFrame:
         search_term_data = search_term_data[columns]
         search_term_data.dropna(subset=['Impr.'], inplace=True)
         search_term_data['Conv. value'] = 0
+    print(f'processing {len(search_term_data.index)} rows')
     return search_term_data
 
 
@@ -42,6 +46,7 @@ def create_efficient_dataframe(roas_or_cpa_target: float, search_term_data: pd.D
     :return: pd.Dataframe that's more efficient
     """
     if filter_on_roas:
+        search_term_data = search_term_data.sort_values(by='Cost', ascending=False)
         search_term_data['roas'] = search_term_data['Conv. value'] / search_term_data['Cost']
         low_value_search_terms_excluded = search_term_data[search_term_data['roas'] > roas_or_cpa_target]
         return low_value_search_terms_excluded
@@ -54,7 +59,7 @@ def create_efficient_dataframe(roas_or_cpa_target: float, search_term_data: pd.D
 # On a dataset with 1.2 million search terms using parallel (unsurprisingly) reduced processing time from 98.6539 to 26 seconds
 
 def vector_generate_exploded_grams(df: pd.DataFrame) -> pd.DataFrame:
-    pandarallel.initialize()
+    pandarallel.initialize(use_memory_fs=False)
     from nltk import word_tokenize
     from nltk.util import everygrams
     df = df.copy(deep=True)
@@ -108,7 +113,6 @@ def generate_dataframe_list(split_on_one: str, split_on_two: str, df: pd.DataFra
 
 def vector_n_grams_cloud_functions(roas_target: float, filter_on_roas: bool, data_for_analysis: str, email: str, save_locally: bool):
     try:
-
         tic = time.perf_counter()
 
         # Generate data for all of the terms
@@ -135,11 +139,17 @@ def vector_n_grams_cloud_functions(roas_target: float, filter_on_roas: bool, dat
         toc = time.perf_counter()
         print(f"Finished ngrams in {toc - tic:0.4f} seconds")
         individual_dfs = generate_dataframe_list('Campaign', 'gram_count', merged)
-        file_name = save_multiple_dataframes_into_excel_doc(individual_dfs, save_locally=save_locally, account_name=email)
+
+        excelerate = time.perf_counter()
+        file_name = save_multiple_dataframes_into_excel_pyexcelerate(individual_dfs, save_locally=save_locally, account_name=email)
+        excelerate_end = time.perf_counter()
+        print(f'excelerate wrote pdf and uploaded file in: {excelerate_end - excelerate:0.4f} seconds')
+
         pre_signed_url = generate_signed_url_for_object("access-cloud-storage-buckets", "temporary-ads-data-storage", file_name)
 
-        send_email(email, "Your N Gram Analysis Is Ready",
-                   f'Here is the link: {pre_signed_url}\n\nIt will expire in 24 hours so please download it now.\n\nRespond to this email for to give feedback')
+        if not save_locally:
+            send_email(email, "Your N Gram Analysis Is Ready",
+                       f'Here is the link: {pre_signed_url}\n\nIt will expire in 24 hours so please download it now.\n\nRespond to this email for to give feedback')
 
         if save_locally:
             pd.set_option('display.width', 800)
@@ -154,10 +164,11 @@ def vector_n_grams_cloud_functions(roas_target: float, filter_on_roas: bool, dat
 
         print(e)
         logging.exception(e)
-        send_email(email, "Your N Gram Analysis Error Failed", "We're not sure what happened yet, but we're investigating.")
-        send_email("me@austinpena.com", f'Your N Gram Analysis Error Failed For {email}', repr(e))
+        if not save_locally:
+            send_email(email, "Your N Gram Analysis Error Failed", "We're not sure what happened yet, but we're investigating.")
+            send_email("me@austinpena.com", f'Your N Gram Analysis Error Failed For {email}', repr(e))
 
 
 if __name__ == "__main__":
     os.chdir("../")
-    vector_n_grams_cloud_functions(2.2, "./n_gram/git_ignored_data/search_terms.csv", "prolock-7_05", False)
+    vector_n_grams_cloud_functions(2.2, True, "./n_gram/git_ignored_data/search_terms.csv", "me@austinpena.com", False)

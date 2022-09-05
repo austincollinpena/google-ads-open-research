@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/austincollinpena/google-ads-open-research/go_code/go_common/gcp"
 	"github.com/google/uuid"
-	"github.com/jszwec/csvutil"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 )
@@ -19,20 +18,17 @@ type NGramServerArgs struct {
 }
 
 // QueueNGramAnalysis puts the n gram job in a Google Cloud Queue
-func QueueNGramAnalysis(n NgramArgs, u []NgramUpload) error {
-	b, err := csvutil.Marshal(u)
-	if err != nil {
-		return errors.Wrap(err, "marshalling ngram args")
-	}
+func QueueNGramAnalysis(n NgramArgs, b []byte) error {
 	fileName := fmt.Sprintf("%s-search-terms-%s", n.Email, uuid.NewString())
-	err = gcp.SaveToGCP(b, fileName)
+	err := gcp.SaveToGCP(b, fileName)
 	if err != nil {
 		return errors.Wrap(err, "uploading n gram to gcp")
 	}
 	ngramServerArgs := NGramServerArgs{
-		FileName:   fileName,
-		RoasTarget: n.RoaSTarget,
-		Email:      n.Email,
+		FileName:     fileName,
+		RoasTarget:   n.RoaSTarget,
+		Email:        n.Email,
+		FilterOnROAS: n.IsROASTarget,
 	}
 
 	argBody, err := json.Marshal(ngramServerArgs)

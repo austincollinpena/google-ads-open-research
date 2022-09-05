@@ -38,13 +38,12 @@ func Ngram(w http.ResponseWriter, r *http.Request) {
 		APIErr(w, r, err.Error())
 		return
 	}
-	var ngramStruct []free_tools.NgramUpload
-	err = ProcessCSVUpload(r, "csvData", &ngramStruct)
+	csvData, err := ProcessCSVUpload(r, "csvData")
 	if err != nil {
 		APIErr(w, r, err.Error())
 		return
 	}
-	err = free_tools.QueueNGramAnalysis(n, ngramStruct)
+	err = free_tools.QueueNGramAnalysis(n, csvData)
 	if err != nil {
 		error_reporting.ReportError(errors.Wrap(err, "queue ngram"))
 		APIErr(w, r, err.Error())
