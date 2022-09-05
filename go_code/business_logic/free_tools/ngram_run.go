@@ -4,26 +4,15 @@ import (
 	"fmt"
 	"github.com/go-gota/gota/dataframe"
 	"github.com/go-gota/gota/series"
+	"github.com/jdkato/prose/tokenize"
 	"github.com/pkg/errors"
+	"strings"
 )
 
 // RunNGrams is the entrypoint for a python implementation of n grams
 func RunNGrams(n []NgramUpload) error {
 	// TODO: Convert "imprtop" and "imprabstop" to absolute values
 	df := MarshallColumnsIntoNumbers(n, []string{"Impr", "Clicks", "Cost", "Conversions", "ConversionValue", "ImprTop", "ImprAbsTop"})
-	//df = df.Filter(dataframe.F{
-	//	Colidx:     0,
-	//	Colname:    "Impr",
-	//	Comparator: series.Greater,
-	//	Comparando: 3,
-	//})
-
-	// TODO: Debug
-	// June 1 - Aug 31 the word "locksmith near me" shows up 40 times in the results but 222 times
-	//
-	// It should show 903 clicks but only shows 40
-	// moving towards just a strings.contains approach, rather than the " " + strings.contains
-	// I see all 903, problem is there are a ton of one words I need to change now
 
 	df = addCostColumns(df, []string{"Conversions", "ConversionValue"})
 
@@ -38,7 +27,9 @@ func RunNGrams(n []NgramUpload) error {
 	})
 
 	uniqueCampaignNames := getUniqueValuesFromSlice(df.Col("Campaign").Records())
-	uniqueSearchTerms := getUniqueValuesFromSlice(df.Col("SearchTerm").Records())
+	tokenizedWords := tokenize.TextToWords(strings.Join(df.Col("SearchTerm").Records(), " "))
+
+	uniqueSearchTerms := getUniqueValuesFromSlice(tokenizedWords)
 	uniqueGrams := getUniqueValuesFromSlice(GenerateNGrams(uniqueSearchTerms))
 
 	completedDF := dataframe.New(
@@ -52,6 +43,7 @@ func RunNGrams(n []NgramUpload) error {
 			Comparator: series.Eq,
 			Comparando: campaign,
 		})
+
 		campaignResults := GetNGramStats(campaignOnlyDF, uniqueGrams, len(uniqueGrams), campaign)
 		campaignResultsDF := dataframe.LoadStructs(campaignResults)
 

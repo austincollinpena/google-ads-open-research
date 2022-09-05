@@ -3,9 +3,10 @@ import os
 from service_account_management.return_credentials import return_credentials
 from google.oauth2 import service_account
 from google.cloud import storage
+from tempfile import NamedTemporaryFile
 
 
-def upload_file(filename, file, service_account_name, bucket_name):
+def upload_file(filename: str, file: NamedTemporaryFile, service_account_name: str, bucket_name: str):
     json_credentials = return_credentials(service_account_name)
     credentials = service_account.Credentials.from_service_account_info(json_credentials)
     storage_client = storage.Client(credentials=credentials)

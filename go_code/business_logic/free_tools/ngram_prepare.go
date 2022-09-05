@@ -5,6 +5,7 @@ import (
 	"github.com/go-gota/gota/dataframe"
 	"github.com/go-gota/gota/series"
 	"github.com/pkg/errors"
+	"github.com/sajari/fuzzy"
 	"strings"
 )
 
@@ -42,6 +43,16 @@ NameLoop:
 		return dataframe.DataFrame{}, errors.Wrap(err, "failed to set up dataframe")
 	}
 	return df, nil
+}
+
+func GetCorrectlySpelledGrams(s []string) []string {
+	model := fuzzy.NewModel()
+	var correctlySpelled []string
+	for _, val := range s {
+		if model.SpellCheck(val)
+		correctlySpelled = append(correctlySpelled, val)
+	}
+	return correctlySpelled
 }
 
 func IndexOf[T comparable](collection []T, el T) int {

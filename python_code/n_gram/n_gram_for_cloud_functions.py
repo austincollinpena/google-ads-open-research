@@ -9,10 +9,11 @@ from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 from tempfile import NamedTemporaryFile
 from interface_with_gcp.cloud_storage.upload_file import upload_file
-import psutil
-import ray
 import time
 import uuid
+from nltk import word_tokenize
+from nltk.util import everygrams
+from pandarallel import pandarallel
 
 
 def p2f(x):
@@ -22,7 +23,7 @@ def p2f(x):
 
 
 # prepare_data reads the csv document and returns with the correct columns
-def prepare_data(data_for_analysis):
+def prepare_data(data_for_analysis: str) -> pd.DataFrame:
     search_term_data = pd.read_csv(data_for_analysis, thousands=",", converters={'Impr. (Top) %': p2f, 'Impr. (Abs. Top) %': p2f})
     columns = ['Search term', 'Campaign', 'Ad group', 'Clicks', 'Impr.', 'Cost', 'Conversions', 'Conv. value', 'Impr. (Top) %', 'Impr. (Abs. Top) %']
     search_term_data = search_term_data[columns]
@@ -180,18 +181,50 @@ def create_excel_file(all_ngram_data, account_name, save_locally=True):
             upload_file(file_name, tmp, 'access-cloud-storage-buckets', 'temporary-ads-data-storage')
 
 
+def vector_generate_exploded_grams(df: pd.DataFrame) -> pd.DataFrame:
+    pandarallel.initialize()
+    df['n_gram'] = df['Search term'] \
+        .str.replace(",", "") \
+        .str.replace(".", "") \
+        .str.replace("!", "") \
+        .str.replace("?", "") \
+        .str.replace(":", "") \
+        .parallel_apply(
+        lambda x: list(map(" ".join, everygrams(word_tokenize(x), max_len=6)))
+    )
+    return df.explode('n_gram')
+
+
+def group_campaign_level_data(df: pd.DataFrame) -> pd.DataFrame:
+    campaign_grouped = group_df_on_grams(df,
+                                         ['n_gram', 'Campaign'])
+    return campaign_grouped
+
+
+def group_df_on_grams(df: pd.DataFrame, group_on_columns: list) -> pd.DataFrame:
+    return df.groupby(group_on_columns, as_index=False).agg(
+        Clicks=("Clicks", "sum"),
+        conversion_value=("Conv. value", "sum"),
+        conversions=("Conversions", "sum"),
+        cost=("Cost", "sum"),
+        impressions=("Impr.", "sum"),
+        n_gram_count=("n_gram", "count")
+    )
+
+
 def n_gram_for_cloud_functions(roas_target, data_for_analysis, account_name, save_locally):
     try:
+        tic = time.perf_counter()
 
         search_term_data = prepare_data(data_for_analysis)
-        print("get all grams")
-        all_grams = generate_grams(search_term_data)
-        print("removed low value terms")
-        low_value_search_terms_excluded = create_negatived_frame(roas_target, search_term_data)
-        print("getting ngram data")
-        tic = time.perf_counter()
-        all_ngram_data = execute_ngrams(search_term_data, all_grams, low_value_search_terms_excluded)
-        print("creating excel file")
+        exploded_ngram_dataframe = vector_generate_exploded_grams(search_term_data)
+        campaign_grouped = group_campaign_level_data(exploded_ngram_dataframe)
+        campaign_grouped.sort_values(by=['cost'], inplace=True, ascending=False)
+        campaign_grouped.head(50)
+        #
+        # all_grams = generate_grams(search_term_data)
+        # low_value_search_terms_excluded = create_negatived_frame(roas_target, search_term_data)
+        # all_ngram_data = execute_ngrams(search_term_data, all_grams, low_value_search_terms_excluded)
         # create_excel_file(all_ngram_data, account_name, save_locally)
         toc = time.perf_counter()
         print(f"Finished in {toc - tic:0.4f} seconds")

@@ -77,7 +77,7 @@ def create_dataframe_of_ngram_stats(all_search_term_data_dict, gram_vecs):
 
     # loop through all the grams
     for search_term_row in all_search_term_data_dict:
-        
+
         # loop through the dict and see if the gram is found in the data
         # If it's found the first time
         for gram in gram_vecs:

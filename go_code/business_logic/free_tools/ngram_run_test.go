@@ -1,12 +1,38 @@
 package free_tools
 
 import (
+	"github.com/jdkato/prose/tokenize"
 	"github.com/jszwec/csvutil"
 	"io"
 	"log"
 	"os"
+	"strings"
 	"testing"
 )
+
+func BenchmarkTokenizer(b *testing.B) {
+	f, err := os.Open("./git-ignored-data/search_terms_6-1_8-31.csv")
+	if err != nil {
+		b.Fatal(err)
+	}
+	asBytes, err := io.ReadAll(f)
+	if err != nil {
+		b.Fatal(err)
+	}
+	var d []NgramUpload
+	err = csvutil.Unmarshal(asBytes, &d)
+	if err != nil {
+		b.Fatal(err)
+	}
+	df := MarshallColumnsIntoNumbers(d, []string{"Impr", "Clicks", "Cost", "Conversions", "ConversionValue", "ImprTop", "ImprAbsTop"})
+	values := df.Col("SearchTerm").Records()
+	stringArray := strings.Join(values, " ")
+	b.ResetTimer()
+	b.ReportAllocs()
+	for n := 0; n < b.N; n++ {
+		tokenize.TextToWords(stringArray)
+	}
+}
 
 func TestRunNGrams(t *testing.T) {
 	f, err := os.Open("./git-ignored-data/search_terms_6-1_8-31.csv")
