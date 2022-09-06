@@ -58,8 +58,39 @@ def create_efficient_dataframe(roas_or_cpa_target: float, search_term_data: pd.D
 
 # On a dataset with 1.2 million search terms using parallel (unsurprisingly) reduced processing time from 98.6539 to 26 seconds
 
+def vector_generate_exploded_grams_parallel(df: pd.DataFrame) -> pd.DataFrame:
+    from nltk.util import everygrams
+    from nltk import word_tokenize
+    if len(df.index) > 5000:
+        pandarallel.initialize(use_memory_fs=False)
+        from nltk import word_tokenize
+        from nltk.util import everygrams
+        df = df.copy(deep=True)
+        df['n_gram'] = df['Search term'] \
+            .str.replace(",", "", regex=False) \
+            .str.replace(".", "", regex=False) \
+            .str.replace("!", "", regex=False) \
+            .str.replace("?", "", regex=False) \
+            .str.replace(":", "", regex=False) \
+            .parallel_apply(
+            lambda x: list(map(" ".join, everygrams(word_tokenize(x), max_len=6)))
+        )
+    else:
+        df = df.copy(deep=True)
+        df['n_gram'] = df['Search term'] \
+            .str.replace(",", "", regex=False) \
+            .str.replace(".", "", regex=False) \
+            .str.replace("!", "", regex=False) \
+            .str.replace("?", "", regex=False) \
+            .str.replace(":", "", regex=False) \
+            .apply(
+            lambda x: list(map(" ".join, everygrams(word_tokenize(x), max_len=6)))
+        )
+
+    return df.explode('n_gram')
+
+
 def vector_generate_exploded_grams(df: pd.DataFrame) -> pd.DataFrame:
-    pandarallel.initialize(use_memory_fs=False)
     from nltk import word_tokenize
     from nltk.util import everygrams
     df = df.copy(deep=True)
@@ -69,7 +100,7 @@ def vector_generate_exploded_grams(df: pd.DataFrame) -> pd.DataFrame:
         .str.replace("!", "", regex=False) \
         .str.replace("?", "", regex=False) \
         .str.replace(":", "", regex=False) \
-        .parallel_apply(
+        .apply(
         lambda x: list(map(" ".join, everygrams(word_tokenize(x), max_len=6)))
     )
     return df.explode('n_gram')
@@ -171,4 +202,4 @@ def vector_n_grams_cloud_functions(roas_target: float, filter_on_roas: bool, dat
 
 if __name__ == "__main__":
     os.chdir("../")
-    vector_n_grams_cloud_functions(2.2, True, "./n_gram/git_ignored_data/search_terms.csv", "me@austinpena.com", False)
+    vector_n_grams_cloud_functions(50000, False, "./n_gram/git_ignored_data/mgaman.csv", "me@austinpena.com", True)
