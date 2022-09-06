@@ -7,6 +7,7 @@ import SecondaryTitle from "../components/typography/secondaryTitle.astro";
 import NormalText from "../components/typography/normalText.astro";
 import BlogCard from "../components/blogCard.astro";
 const posts = await Astro.glob("./**/*.mdx");
+import { Image as AstroImage } from "@astrojs/image/components";
 ---
 
 <div class="bg-brandNeutral">
@@ -86,11 +87,13 @@ const posts = await Astro.glob("./**/*.mdx");
             <MediumText>
               <p class="font-black mb-4">About</p>
             </MediumText>
-            <img
+            <AstroImage
               class="mb-4"
               loading="lazy"
               alt="austin pena headshot"
               src="/austin_pena_headshot.jpg"
+              width={"550px"}
+              aspectRatio="400:314"
             />
             <MediumText>
               Founded by Austin Pena, <i>Google Ads Open Research</i>

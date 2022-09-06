@@ -1,9 +1,18 @@
 ---
 export interface Props {
-    Image: string;
-    Alt: string;
+  Image: string;
+  Alt: string;
+  AspectRatio: string;
 }
-const { src, alt } = Astro.props;
+const { src, alt, AspectRatio } = Astro.props;
+
+import { Image as AstroImage } from "@astrojs/image/components";
 ---
 
-<img loading="lazy" alt={alt} src={src} />
+<AstroImage
+  width={"1200px"}
+  aspectRatio={AspectRatio}
+  loading="lazy"
+  alt={alt}
+  src={src}
+/>

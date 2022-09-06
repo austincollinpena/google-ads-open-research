@@ -33,6 +33,7 @@ The result, your user is waiting around.
 <Image
   alt="google optimize is slow because of round trips"
   src="/google-optimize-problems.svg"
+  AspectRatio="701:1018"
 />
 
 The alternative is Cloudflare workers. This Cloudflare worker randomly assigns users for their A/B experience.
@@ -40,6 +41,7 @@ The alternative is Cloudflare workers. This Cloudflare worker randomly assigns u
 <Image
   alt="Cloudflare workers is fast because of fewer round trips"
   src="/cloudflare-worker-illustration.svg"
+  AspectRatio="701:350"
 />
 
 ## Set up steps
@@ -49,21 +51,31 @@ The alternative is Cloudflare workers. This Cloudflare worker randomly assigns u
 <Image
   alt="create a google optimize experiment"
   src="/create-google-optimize-experiment.png"
+  AspectRatio="701:98"
 />
 
 The name doesn't matter, but be sure to select "A/B" test.
 
-<Image alt="create a google optimize experiment" src="/experiment-name.png" />
+<Image
+  alt="create a google optimize experiment"
+  src="/experiment-name.png"
+  AspectRatio="701:532"
+/>
 
 Add a variant
 
-<Image alt="name your Google optimize experiment" src="/add-variant-name.png" />
+<Image
+  alt="name your Google optimize experiment"
+  src="/add-variant-name.png"
+  AspectRatio="701:190"
+/>
 
 Your dashboard should look something like this:
 
 <Image
   alt="name your Google optimize experiment"
   src="/google-optimize-dashboard.png"
+  AspectRatio="701:333"
 />
 
 To let Google Optimize know that your experiment is run serverside, click on the pencil
@@ -71,6 +83,7 @@ To let Google Optimize know that your experiment is run serverside, click on the
 <Image
   alt="name your Google optimize experiment"
   src="/set-target-to-serverside.png"
+  AspectRatio="701:175"
 />
 
 And then update the URL to `SERVER_SIDE`
@@ -78,11 +91,16 @@ And then update the URL to `SERVER_SIDE`
 <Image
   alt="name your Google optimize experiment"
   src="/set-to-correct-name.png"
+  AspectRatio="701:218"
 />
 
 You can ignore this warning.
 
-<Image alt="ignore this warning" src="/ignore-warning.png" />
+<Image
+  alt="ignore this warning"
+  src="/ignore-warning.png"
+  AspectRatio="701:185"
+/>
 
 Copy your experiment ID and then start the experiment.
 
