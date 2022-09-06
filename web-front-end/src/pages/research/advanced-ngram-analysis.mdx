@@ -1,18 +1,20 @@
 ---
 layout: ../../layouts/blog-explicit-prose.astro
-title: Kill Wasted Spend And Scale What Works With Advanced N Gram Analysis
-headline: Kill Wasted Spend And Scale What Works With Advanced N Gram Analysis
-description: This novel twist on n gram analysis helps you uncover scale in your account
+title: Kill Wasted Spend And Scale What Works With Layered N-Gram Analysis
+headline: Kill Wasted Spend And Scale What Works With Layered N-Gram Analysis
+description: Layered n gram analysis is the most effective way to improve search term performance.
 image: "/generated/computer-with-eyes.png"
-publishDate: "August 31 2022"
+publishDate: "September 6 2022"
 draft: false
 ---
+
+import Image from "../../components/Image.astro";
 
 import Ngram from "../../components/tool/NGramUploader.tsx";
 
 <div class="prose prose-xl mx-auto my-12">
 
-# Advanced N Grams For Google Ads With Python
+# Advanced N-Gram Analysis For Google Ads With Python
 
 </div>
 
@@ -30,9 +32,89 @@ _Big thank you to [Dan Willoughby](https://www.linkedin.com/in/dan-willoughby-09
 
 ---
 
-This tool is free to use. Upload a CSV here to get an analysis emailed to you. **Your email will not be stored. We need your email because processing takes up to an hour**
+[Skip the explanation and jump to the tool](#n-gram-tool) ◀◀◀
 
-[Click here to view the code](code)
+## How n-grams help you become more profitable
+
+### But first, what are they?
+
+If you've managed Google Ads Accounts for a while, you've likely intuitively used them. For example, you might have a phrase match of "how to" or "diy" negatives for your accounts.
+
+You know that these terms are very unlikely to bring in quality searches.
+
+N grams are a way to use your data to find how common phrases do across a large amount of search terms.
+
+If you put a 1000 search terms and find the common phrases, or "n-grams", you can quickly make judgements on the efficacy of those n-grams.
+
+The common phrase or 2 gram of "near me" for a local account is likely very positive.
+
+The common phrase or 3 gram of "how do I" for a local account is very negative.
+
+Using n grams helps you get data out of your search terms _faster_.
+
+### Quick example
+
+Let's say you're a D2C deodarant company. You've got about 1,000 ways that people search for deodarant.
+
+Most of those long tail search terms don't have enough data to say if they're "good" or "bad"
+
+For example, "best deodarant for men mint smell no aluminum" might only have 3 clicks. Is the term worth continuing to bid on or not?
+
+This is where n grams come in.
+
+An n gram analysis might now that the 4 gram of "best deodarant for men" is highly profitable. Therefore, it is likely that this search term will become profitable.
+
+### Where traditional n gram analysis fails
+
+In a traditional analysis, n grams are all aggregated together and produce a score.
+
+The 4 gram of "best deodarant for men" may have spent $10,000 and generated $15,000 in profit.
+
+However, in most PPC accounts, it is likely that $8,000 of that spend resulted in $14,500 in that profit.
+
+If you are able to find and cut the $2,000 in spend that lost your $1500, you can achieve more profit.
+
+#### But wait, it gets worse
+
+Let's say you have a 3 gram of "dove men deodarant" that spent $5,000 and only brought in $1,500 in revenue. Any PPC manager would be tempted to do a phrase match exclusion.
+
+However, what if you could find out that all $1500 of that revenue came from search terms with $200 in spend?
+
+For example, your exclusion of "dove men deodarant" could have negatived out "dove men deodarant alternatives" which is a great term.
+
+In a traditional N Gram analysis, you would be open to making this mimstake. With layered n gram analysis, you will not.
+
+## How layered N Gram analysis brings you effeciency
+
+Layered n gram analysis allows you to set a CPA target or ROAS goal.
+
+Each gram analysis is given two scores:
+
+1. Regular
+2. Efficient
+
+In this (simplified) example below, you can see the top row spent $26,000.17 to generate $84,318.
+
+However, **an essentially identical result could have been achieved with $5,300 less spend**.
+
+<Image alt="sample n gram analysis" src="/sample-gram-usage.png" />
+
+This is the power of layered n gram analysis.
+
+## The Free Tool
+
+This tool is free to use. Upload a CSV here to get an analysis emailed to you.
+
+Important privacy notes:
+
+1. Your email is not used for any other reason than to send your results
+2. Your data is not accessed or used for any other reason than sending your results
+3. All data is deleted within 24 hours, whether or not you access it
+4. If you want your data team to run this analysis for you, [here is the code](https://github.com/austincollinpena/google-ads-open-research/blob/main/python_code/n_gram/vector_n_gram_for_cloud_functions.py)
+
+---
+
+<div id="n-gram-tool" />
 
 Export these columns from your search term report for this to work. You will be able to keep the default names that Google exports.
 
@@ -47,8 +129,30 @@ Export these columns from your search term report for this to work. You will be 
 - Impressions (Top %)
 - Impressions (Abs Top %)
 
-After you export, delete the first two rows of your export as well as the summary rows at the bottom.
+**Important**: After you export, delete the first two rows of your export as well as the summary rows at the bottom.
 
 </div>
 
 <Ngram client:idle />
+
+<div class="prose prose-xl mx-auto my-12">
+
+## FAQ about Layered N Gram analysis
+
+### What should I do next?
+
+Take this data and find the high performers and low performers in your account.
+
+Consider giving your high performers special treatment, and segmenting (or adding negatives for) your low performers.
+
+### What should I look out for?
+
+It can be tempting to exclude phrases **too early** because of data from n gram analysis.
+
+If you're dealing with low volume of data, it's better to "quarantine" your searches into specific campaigns with lower bids rather than excluding them outright.
+
+### Why is this free to use?
+
+Enough people hire me to automate big accounts or increase account efficiency making this worth it. [Send me an email at austin@googleadsopenresearch.com](mailto:austin@googleadsopenresearch.com) if that's something you're looking for.
+
+</div>

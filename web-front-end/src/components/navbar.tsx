@@ -26,7 +26,7 @@ const solutions = [
   {
     name: "Contribute Code",
     description: "Have code you want added to the site?",
-    href: "#",
+    href: "https://github.com/austincollinpena/google-ads-open-research/discussions",
     icon: CursorArrowRaysIcon,
   },
 ];
@@ -147,12 +147,12 @@ export default function Example() {
               Research
             </a>
 
-            <a
+            {/* <a
               href="/about"
               className="text-base font-medium text-gray-500 hover:text-gray-900"
             >
               About
-            </a>
+            </a> */}
             <a
               href="/contact"
               className="text-base font-medium text-gray-500 hover:text-gray-900"
