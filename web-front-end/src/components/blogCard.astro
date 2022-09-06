@@ -2,37 +2,40 @@
 import TertiaryTitle from "./typography/tertiaryTitle.astro";
 
 export interface Props {
-    Headline: string;
-    Description: string;
-    Image: string;
-    Link?: string;
+  Headline: string;
+  Description: string;
+  Image: string;
+  Link?: string;
 }
+
+import { Image as AstroImage } from "@astrojs/image/components";
 
 const { Headline, Description, Image, Link } = Astro.props;
 ---
 
 <div class="bg-brandNeutral-dark border-2 border-black">
-    <div class="flex md:flex-row flex-col-reverse">
-        <div class="flex-1 md:py-8 px-8 my-auto space-y-4 pb-4">
-            <TertiaryTitle>
-                <p class="font-bold">{Headline}</p>
-            </TertiaryTitle>
-            <p>{Description}</p>
-            <a
-                href={Link}
-                class="font-bold block text-white text-center bg-black px-8 py-2"
-                >Read More</a
-            >
-        </div>
-        <div
-            class="px-4 my-4 md:py-2 md:my-auto max-w-[330px] h-[100px] md:h-full object-cover"
-        >
-            <img
-                class="h-full w-full object-cover"
-                src={Image}
-                alt="blog description image"
-                loading="lazy"
-            />
-        </div>
+  <div class="flex md:flex-row flex-col-reverse">
+    <div class="flex-1 md:py-8 px-8 my-auto space-y-4 pb-4">
+      <TertiaryTitle>
+        <p class="font-bold">{Headline}</p>
+      </TertiaryTitle>
+      <p>{Description}</p>
+      <a
+        href={Link}
+        class="font-bold block text-white text-center bg-black px-8 py-2"
+        >Read More</a
+      >
     </div>
+    <div
+      class="px-4 my-4 md:py-2 md:my-auto max-w-[330px] h-[100px] md:h-full w-full object-cover"
+    >
+      <AstroImage
+        width={"330px"}
+        aspectRatio={"1:1"}
+        src={Image}
+        alt="blog description image"
+        loading="lazy"
+      />
+    </div>
+  </div>
 </div>

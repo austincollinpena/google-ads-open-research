@@ -2,5 +2,5 @@ allowedOrigins: [
   "https://googleadsopenresearch.com"
 ]
 serveServerFrom: "0.0.0.0:8080"
-pythonAnalyticsServer: "https://python-analytics-qpd6oo26kq-uc.a.run.app"
+pythonAnalyticsServer: "https://require-auth-python-analytics-qpd6oo26kq-uc.a.run.app"
 prod: true
