@@ -8,8 +8,6 @@ export interface Props {
   Link?: string;
 }
 
-import { Image as AstroImage } from "@astrojs/image/components";
-
 const { Headline, Description, Image, Link } = Astro.props;
 ---
 
@@ -29,13 +27,7 @@ const { Headline, Description, Image, Link } = Astro.props;
     <div
       class="px-4 my-4 md:py-2 md:my-auto max-w-[330px] h-[100px] md:h-full w-full object-cover"
     >
-      <AstroImage
-        width={"330px"}
-        aspectRatio={"1:1"}
-        src={Image}
-        alt="blog description image"
-        loading="lazy"
-      />
+      <img src={Image} alt="blog description image" loading="lazy" />
     </div>
   </div>
 </div>
