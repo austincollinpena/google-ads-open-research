@@ -9,6 +9,9 @@ go_code/business_logic/free_tools/git-ignored-data/
 !python_code/n_gram/git_ignored_data/processed_files/.gitkeep
 
 
+.env.sensitive
+
+
 service_accounts/
 
 # Byte-compiled / optimized / DLL files
