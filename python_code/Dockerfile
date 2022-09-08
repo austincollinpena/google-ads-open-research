@@ -3,7 +3,7 @@
 
 # docker run us-central1-docker.pkg.dev/totemic-fact-361111/python-analytics/rest_api:latest
 
-# gcloud run deploy python-analytics --image=us-central1-docker.pkg.dev/totemic-fact-361111/python-analytics/rest_api:latest --platform="managed" --region="us-central1" --project="totemic-fact-361111"
+# gcloud run deploy require-auth-python-analytics --image=us-central1-docker.pkg.dev/totemic-fact-361111/python-analytics/rest_api:latest --platform="managed" --region="us-central1" --project="totemic-fact-361111"
 
 FROM python:3.10-slim
 

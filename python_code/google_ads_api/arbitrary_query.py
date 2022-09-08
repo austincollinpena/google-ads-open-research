@@ -53,8 +53,6 @@ def arbitrary_google_ads_query(account_id: str, mcc_id: Optional[str], select: l
 
             result = {}
             for criteria in select:
-                if criteria == "segments.device":
-                    print(row)
                 # the row is not subscriptable so we need to use getattr for dynamic queries
                 first_level_key = criteria.split(".")[0]
                 second_level_key = criteria.split(".")[1]
