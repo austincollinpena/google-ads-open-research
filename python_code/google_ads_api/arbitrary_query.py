@@ -50,20 +50,26 @@ def arbitrary_google_ads_query(account_id: str, mcc_id: Optional[str], select: l
 
     for batch in stream:
         for row in batch.results:
+
             result = {}
             for criteria in select:
+                if criteria == "segments.device":
+                    print(row)
                 # the row is not subscriptable so we need to use getattr for dynamic queries
                 first_level_key = criteria.split(".")[0]
                 second_level_key = criteria.split(".")[1]
                 row_attribute = getattr(row, first_level_key)
                 value_attribute = getattr(row_attribute, second_level_key)
+                if hasattr(value_attribute, 'name'):
+                    value_attribute = getattr(value_attribute, 'name')
+
                 result[criteria] = value_attribute
             result_dict.append(result)
 
     if not result_dict:
         return None
 
-    return pd.DataFrame(data=result_dict)
+    return pd.DataFrame(result_dict)
 
 
 if __name__ == "__main__":
