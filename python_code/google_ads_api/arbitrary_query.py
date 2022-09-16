@@ -39,7 +39,7 @@ def arbitrary_google_ads_query(account_id: str, mcc_id: Optional[str], select: l
             f'{create_order_by_string(order_by)} '
 
     if parquet_cache:
-        hashed_query = hashlib.sha256(query.encode('utf-8')).hexdigest()
+        hashed_query = hashlib.sha256((query + account_id + mcc_id).encode('utf-8')).hexdigest()
         file_exists = exists(f"./google_ads_api/git_ignored_data/{hashed_query}")
         if file_exists:
             return pd.read_parquet(f"./google_ads_api/git_ignored_data/{hashed_query}")

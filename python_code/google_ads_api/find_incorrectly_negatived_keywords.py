@@ -16,11 +16,11 @@ def get_improper_negatives():
         select=['segments.keyword.info.text', 'campaign.name', 'search_term_view.search_term', 'metrics.clicks', 'metrics.cost_micros', 'metrics.impressions',
                 'metrics.conversions'],
         from_arg='search_term_view',
-        where_argument="metrics.conversions > 0",
+        where_argument="metrics.conversions > 1",
         order_by=None,
     )
-    negatives['search_term'] = negatives['search_term'].str.lower
-    improperly_negatived_keywords = pd.DataFrame()
+    negatives['negative_keyword'] = negatives['negative_keyword'].str.lower()
+    improperly_negatived_keywords = []
     for row in negatives.itertuples():
         neg_keyword = str(row.negative_keyword)
         match_type = str(row.match_type)
@@ -56,9 +56,10 @@ def get_improper_negatives():
             continue
         excluded_keywords['negative_keyword'] = neg_keyword
         excluded_keywords['keyword_list'] = keyword_list
-        improperly_negatived_keywords = pd.concat([improperly_negatived_keywords, excluded_keywords])
+        improperly_negatived_keywords.append(excluded_keywords)
 
-    print(search_terms_over_threshold)
+    improper_negative_df = pd.concat(improperly_negatived_keywords, axis=0)
+    improper_negative_df.to_csv("./google_ads_api/git_ignored_data/improper-negative.csv")
 
 
 if __name__ == "__main__":
