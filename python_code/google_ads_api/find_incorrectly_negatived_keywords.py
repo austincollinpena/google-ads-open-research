@@ -20,8 +20,6 @@ def get_improper_negatives():
         order_by=None,
     )
     negatives['search_term'] = negatives['search_term'].str.lower
-    search_terms_over_threshold
-    # TODO: normalize text
     improperly_negatived_keywords = pd.DataFrame()
     for row in negatives.itertuples():
         neg_keyword = str(row.negative_keyword)
