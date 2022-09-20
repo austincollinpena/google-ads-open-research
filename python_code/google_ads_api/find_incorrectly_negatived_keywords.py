@@ -13,7 +13,8 @@ def get_improper_negatives():
     search_terms_over_threshold = arbitrary_google_ads_query(
         account_id=config['account_id'],
         mcc_id=config['mcc_id'],
-        select=['segments.keyword.info.text', 'campaign.name', 'search_term_view.search_term', 'metrics.clicks', 'metrics.cost_micros', 'metrics.impressions',
+        select=['segments.keyword.info.text', 'search_term_view.status', 'campaign.name', 'search_term_view.search_term', 'metrics.clicks', 'metrics.cost_micros',
+                'metrics.impressions',
                 'metrics.conversions'],
         from_arg='search_term_view',
         where_argument="metrics.conversions > 1",

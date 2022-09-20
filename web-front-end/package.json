@@ -12,6 +12,7 @@
   "devDependencies": {
     "@astrojs/image": "^0.5.0",
     "@astrojs/mdx": "^0.10.3",
+    "@astrojs/prefetch": "^0.0.7",
     "@astrojs/react": "^1.1.0",
     "@astrojs/tailwind": "^1.0.0",
     "@types/react": "^18.0.17",
