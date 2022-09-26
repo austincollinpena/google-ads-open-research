@@ -51,8 +51,8 @@ def create_efficient_dataframe(roas_or_cpa_target: float, search_term_data: pd.D
         low_value_search_terms_excluded = search_term_data[search_term_data['roas'] > roas_or_cpa_target]
         return low_value_search_terms_excluded
     else:
-        search_term_data['cpa'] = search_term_data['Conversions'] / search_term_data['Cost']
-        low_value_search_terms_excluded = search_term_data[search_term_data['cpa'] > roas_or_cpa_target]
+        search_term_data['cpa'] = search_term_data['Cost'] / search_term_data['Conversions']
+        low_value_search_terms_excluded = search_term_data[search_term_data['cpa'] < roas_or_cpa_target]
         return low_value_search_terms_excluded
 
 
