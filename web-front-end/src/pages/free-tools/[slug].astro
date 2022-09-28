@@ -1,0 +1,69 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import NavBar from "../../components/navbar";
+import NGramWithAuth from "../../components/tool/NGramWithAuth";
+import ImproperNegativeFinder from "../../components/tool/ImproperNegativeFinder";
+
+export function getStaticPaths() {
+  return [
+    { params: { slug: "home" } },
+    { params: { slug: "layered-n-gram-analysis" } },
+    { params: { slug: "improper-negative-finder" } },
+  ];
+}
+
+const sideBarOptions = [
+  {
+    name: "Layered N Gram Analysis",
+    href: "layered-n-gram-analysis",
+    desc: "Find wasted spend and room for scale from your search terms with this new take on n gram analsysis.",
+  },
+  {
+    name: "Improper Negative Finder",
+    href: "improper-negative-finder",
+    desc: "Are you adding negatives for search terms that used to be productive?",
+  },
+];
+
+const { slug } = Astro.params;
+---
+
+<NavBar client:load />
+<Layout title="Free Google Ads Tools">
+  <div class="container mx-auto flex">
+    <div class="w-[420px] max-w-[420px] px-3 flex-1 bg-brandNeutral-dark">
+      <p class="font-black text-2xl mt-6">Free Tools</p>
+      {
+        sideBarOptions.map((opt) => {
+          return (
+            <div
+              class={`border-l-2  my-6 py-4
+                ${
+                  slug === opt.href
+                    ? "border-brandCTA-dark bg-brandNeutral"
+                    : "border-stone-400"
+                }
+                
+                
+                `}
+            >
+              <a class="block ml-2" href={"/free-tools/" + opt.href + "/"}>
+                <span class="block text-lg font-bold">{opt.name}</span>
+                <span class="block pt-2">{opt.desc}</span>
+              </a>
+            </div>
+          );
+        })
+      }
+    </div>
+    {slug === "home" && <div class="flex-1">Select Your Tool</div>}
+    {slug === "layered-n-gram-analysis" && <NGramWithAuth client:idle />}
+    {
+      slug === "improper-negative-finder" && (
+        <>
+          <ImproperNegativeFinder client:idle />
+        </>
+      )
+    }
+  </div>
+</Layout>

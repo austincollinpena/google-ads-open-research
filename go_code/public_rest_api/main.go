@@ -4,6 +4,8 @@ import (
 	"github.com/austincollinpena/google-ads-open-research/go_code/ops/config"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/gorilla/sessions"
+	"github.com/markbates/goth/gothic"
 	"github.com/rs/cors"
 	"github.com/spf13/viper"
 	"log"
@@ -33,16 +35,10 @@ func Routes() *chi.Mux {
 	)
 	router.Route("/v1", func(r chi.Router) {
 		r.Mount("/api/free-tools", freeToolRoutes())
+		r.Mount("/api/oauth", oauth())
+		r.Mount("/api/user", user())
 	})
 	return router
-}
-
-func maxBytes(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// As an example, limit post body to 10 bytes
-		r.Body = http.MaxBytesReader(w, r.Body, 52428800000000000)
-		next.ServeHTTP(w, r)
-	})
 }
 
 func RunServer() {
@@ -51,6 +47,11 @@ func RunServer() {
 	walkFunc := func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
 		log.Printf("%s %s\n", method, route) // Walk and print out all routes
 		return nil
+	}
+	gothic.Store = sessions.NewCookieStore([]byte("fake-sessions-store-to-stop-annoying-warning"))
+	err := InitSecureCookie()
+	if err != nil {
+		log.Fatal(err)
 	}
 	if err := chi.Walk(router, walkFunc); err != nil {
 		log.Panicf("Logging err: %s\n", err.Error()) // panic if there is an error
@@ -65,7 +66,7 @@ func RunServer() {
 		MaxHeaderBytes:    5242880000,
 	}
 
-	err := s.ListenAndServe()
+	err = s.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
 	}

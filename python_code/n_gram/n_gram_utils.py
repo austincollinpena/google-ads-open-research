@@ -1,5 +1,3 @@
-import nltk
-import ray
 import unicodedata
 import re
 import pandas as pd
@@ -27,33 +25,13 @@ def basic_clean(text):
 # Commit 9a1c5a409ef1aba5446c80d18487b811fdd873b2 shows how to use ray for multiprocessing
 # message is "parallel ray"
 
-@ray.remote
-def create_dataframe_of_ngram_stats_positive_and_negative(all_search_term_data_dict, all_search_term_data_dict_efficient, gram_vecs, df_columns, campaign_name):
-    # get stats from the n gram (all_grams[campaign_name] gets the n grams)
-    dict_with_ngram_stats = create_dataframe_of_ngram_stats(all_search_term_data_dict, gram_vecs)
-    dict_with_ngram_stats_efficient = create_dataframe_of_ngram_stats(all_search_term_data_dict_efficient, gram_vecs)
-
-    # create the dataframes
-    ngram_analysis_from_search_terms = pd.DataFrame.from_dict(dict_with_ngram_stats, orient='index', columns=df_columns)
-    ngram_analysis_from_search_terms = ngram_analysis_from_search_terms.reset_index().rename(columns={'index': 'Search term'})
-
-    ngram_analysis_from_search_terms_efficient = pd.DataFrame.from_dict(dict_with_ngram_stats_efficient, orient='index', columns=df_columns)
-    ngram_analysis_from_search_terms_efficient = ngram_analysis_from_search_terms_efficient.reset_index().rename(columns={'index': 'Search term'})
-
-    # merge the dataframes
-    merged = ngram_analysis_from_search_terms.merge(ngram_analysis_from_search_terms_efficient, left_on='Search term', right_on='Search term', how='left',
-                                                    suffixes=['', '_efficient'])
-
-    merged.set_index('Search term', inplace=True)
-    merged['campaign'] = campaign_name
-    return merged
-
 
 def tokenize(string):
     """Convert string to lowercase and split into words (ignoring
     punctuation), returning list of words.
     """
     return re.findall(r'\w+', string.lower())
+
 
 # Takes in a dictionary of the n gram dataframe and all the gram vecotrs
 # also takes in more_efficient_search_term_data_dict (which can be empty) that shows the outcome if low ROAS
@@ -72,8 +50,6 @@ def create_dataframe_of_ngram_stats(all_search_term_data_dict, gram_vecs):
         for length in lengths:
             if len(current) >= length:
                 ngrams[length][current[:length]] += 1
-
-
 
     # loop through all the grams
     for search_term_row in all_search_term_data_dict:

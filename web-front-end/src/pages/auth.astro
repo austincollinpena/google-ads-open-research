@@ -1,0 +1,17 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Contact from "../components/contact";
+import NavBar from "../components/navbar";
+---
+
+<NavBar client:load />
+<Layout title="Request Research">
+  <div class="my-24 container mx-auto">
+    <a
+      href={`${import.meta.env.PUBLIC_PUBLIC_API}/v1/api/oauth/auth`}
+      class="text-4xl font-bold bg-indigo-100 px-20 py-32 rounded-xl"
+    >
+      Hello world</a
+    >
+  </div>
+</Layout>

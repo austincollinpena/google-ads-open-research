@@ -1,6 +1,5 @@
 import logging
 
-import nltk
 import pandas as pd
 import os
 import time
@@ -15,7 +14,7 @@ from interface_with_gcp.cloud_storage.get_file import generate_signed_url_for_ob
 
 
 def p2f(x):
-    if x == " --":
+    if x == " --" or x == "--":
         return 0
     return float(x.strip('%')) / 100
 
@@ -202,4 +201,4 @@ def vector_n_grams_cloud_functions(roas_target: float, filter_on_roas: bool, dat
 
 if __name__ == "__main__":
     os.chdir("../")
-    vector_n_grams_cloud_functions(50000, False, "./n_gram/git_ignored_data/mgaman.csv", "me@austinpena.com", True)
+    vector_n_grams_cloud_functions(10, True, "./n_gram/git_ignored_data/mgaman.csv", "me@austinpena.com", True)
