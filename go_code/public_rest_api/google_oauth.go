@@ -24,7 +24,6 @@ func oauth() *chi.Mux {
 }
 
 func Google(w http.ResponseWriter, r *http.Request) {
-
 	oauthClientID, err := gcp.GetSecret(r.Context(), "google_ads_oauth_client_id")
 	if err != nil {
 		error_reporting.ReportError(errors.Wrap(err, "getting secret for oauth client id"))

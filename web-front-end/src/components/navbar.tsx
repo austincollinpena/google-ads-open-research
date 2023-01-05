@@ -15,6 +15,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline/index.js";
 import { ChevronDownIcon } from "@heroicons/react/20/solid/index.js";
+import React from "react";
 
 const solutions = [
   {
@@ -81,7 +82,6 @@ export default function Example() {
               <Bars3Icon className="h-6 w-6" aria-hidden="true" />
             </Popover.Button>
           </div>
-          {/* @ts-ignore */}
           <Popover.Group as="nav" className="hidden space-x-10 md:flex">
             <Popover className="relative">
               {({ open }: { open: boolean }) => (

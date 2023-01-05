@@ -62,8 +62,6 @@ def arbitrary_google_ads_query(account_id: str, mcc_id: Optional[str], select: l
 
             result = {}
             for criteria in select:
-                if criteria == "segments.device":
-                    print(row)
                 # the row is not subscriptable so we need to use getattr for dynamic queries
                 # (we can't just say go get row[campaign_criterion.criterion_id]
                 # this needs to handle getting the GRPC attribute from a row for items like
@@ -100,8 +98,10 @@ if __name__ == "__main__":
     # all functions should run assuming the python_code/ folder as root
     os.chdir("../")
     config = dotenv_values(".env.sensitive")
-    df = arbitrary_google_ads_query(account_id=config['account_id'], mcc_id=config['mcc_id'], select=["search_term_view.search_term", "metrics.clicks", "campaign.name"],
-                                    from_arg="search_term_view",
-                                    where_argument="metrics.clicks > 100",
+    df = arbitrary_google_ads_query(account_id=config['account_id'], mcc_id=config['mcc_id'],
+                                    select=["metrics.cost_per_conversion", "segments.ad_network_type", "detail_placement_view.resource_name",
+                                            "detail_placement_view.display_name"],
+                                    from_arg="detail_placement_view",
+                                    where_argument=None,
                                     order_by=None)
     print(df)

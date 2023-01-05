@@ -1,0 +1,105 @@
+---
+layout: ../../layouts/blog-explicit-prose.astro
+title: The Effect Of Sentiment Score On Ad Rank
+headline: The Effect Of Sentiment Score On Ad Rank
+description: This is how the positivity or negativity of a headline influences Google Ads headline performance
+image: "/generated/sentiment_score.png"
+publishDate: "January 6 2023"
+draft: false
+---
+
+import Image from "../../components/Image.astro";
+
+import Ngram from "../../components/tool/NGramUploader.tsx";
+
+<div class="prose prose-xl mx-4 md:mx-auto my-12">
+
+# The Effect Of Sentiment Score On Ad Rank
+
+<span class="font-bold">More specifically, the effect of sentiment score on the average position an ad shows up in an auction relative to a domain's average position from all headlines.</span>
+
+</div>
+
+<div class="prose prose-xl mx-4 md:mx-auto my-12">
+
+---
+
+**Summary**
+
+1. Ed Leake put out a video suggesting that higher sentiment scores lead to better ad rank
+2. With over 70,000 headlines collected from <a href="https://radspy.io">Rad Spy</a>, I illustrate the positive correlation between sentiment score and ad positioning
+3. Keywords with a -.4 or higher sentiment score (on a scale of -.9 to .9) have a statistically significant correlation with better than average positioning than keywords with a -.9 to -5 sentiment score
+
+---
+
+## Abstract (Or, WTF is this?)
+
+Sentences can be categorized by AI as positive or negative. <a href="https://cloud.google.com/natural-language" target="_blank">You can test it out for yourself through Google's AI part way down on this page.</a>
+
+Ed Leake said in <a href="https://www.youtube.com/watch?v=0s8mCdxvorU" target="_blank">this video</a> that a more positive ad rank will lead to better ad ranking, is he correct?
+
+Yes.
+
+**As sentiment score goes up, the average position an advertiser's headline goes up too**
+
+
+<Image
+  alt="sample n gram analysis"
+  src="/correlation-graph.png"
+  AspectRatio="3004:710"
+/>
+
+The below graph is based on data that:
+1. Finds the average position of a given domain for a given keyword. "Competitor A" might average position 1.5 with a standard deviation of .4. "Competitor B" might average position 2.6 with a standard deviation of .6.
+2. Calculates the standard deviations away a given headline may be from the domain's average
+3. Calculates the standard deviations away from the domain's average, grouped by sentiment score
+
+A sentiment score of -.7 shows nearly -.2 standard deviations *lower* position than the domain's average.
+
+
+**Concrete Example:**
+
+An advertiser has two headlines.
+1. A headline with a sentiment score of -.7
+2. A headline with a sentiment score of .9
+
+The headline with a sentiment score may be more likely to show up lower in an auction (-.2 standard deviations away from average) compared to a headline with a positive score of .9, which may show up .06 standard deviations above average.
+
+### But is it statistically significant?
+
+When running a test of statistical significance, headlines with a -.4 sentiment score or lower show up in a .44 standard deviations lower position than headlines with a greater than -.4 sentiment score with a P value of .14. 
+
+**Translation**: We can say, with 86% confidence, that having a headline with a greater than -.4 sentiment score improves your ad position, and the average effect is .44 standard deviations.
+
+Furthermore, having a headline sentiment score of .5 or higher, brings the average position up 1.77 times with a P value of .075.
+
+> Higher sentiment scores in ad copy are highly correlated with improved positioning in an auction, especially when compared to low sentiment scores.
+
+
+## Caveats: Or Why You Should Take This With a Grain of salt
+
+- Correlation is not causation
+- The more important metric to measure is the effect of headline sentiment score on CTR, not on average position in an auction. This is data that I'm working on collecting.
+- True tests of statistical significance are run on independent samples. Because headlines are split apart from each other, these two samples are likley not independent
+
+## Where negative ad copy may be more effective than positive ad copy
+
+A key factor in ad rank is relevance. This analysis did little to assess the lurking variable of "relavance" of a headline to a given query.
+
+In fact, when isolating headlines that did not have any matching words from the query, it appears that very negative headlines showed up much higher! (Below, the blue bar are the observations where the headline does not have any of the keywords in the text)
+
+
+<Image
+  alt="sample n gram analysis"
+  src="/contains_keyword.png"
+  AspectRatio="2871:708"
+/>
+
+There isn't enough data to make use of this observation yet. Perhaps once I collect 500k ad results and 1 million headlines I will rewrite this section with better data.
+
+Until that time, it's been a blast.
+
+\- Austin
+
+
+</div>
