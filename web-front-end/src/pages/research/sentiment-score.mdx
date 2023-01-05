@@ -49,10 +49,12 @@ Yes.
   AspectRatio="3004:710"
 />
 
-The below graph is based on data that:
-1. Finds the average position of a given domain for a given keyword. "Competitor A" might average position 1.5 with a standard deviation of .4. "Competitor B" might average position 2.6 with a standard deviation of .6.
-2. Calculates the standard deviations away a given headline may be from the domain's average
-3. Calculates the standard deviations away from the domain's average, grouped by sentiment score
+Here's what the above graph means:
+Every advertiser has an average position in an auction, like 2, as well as a standard deviation like .4. That means, 68% of the time, they show up between positions 1.6 and 2.4.
+
+Each time they showed up, I calculated the standard deviations away they were from their average, as well as the sentiment score.
+
+I then grouped that data based on sentiment score to show the average standard deviations away a given sentiment score is from the average domain positioning.
 
 A sentiment score of -.7 shows nearly -.2 standard deviations *lower* position than the domain's average.
 
