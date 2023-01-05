@@ -25,9 +25,14 @@ const { Headline, Description, Image, Link } = Astro.props;
       >
     </div>
     <div
-      class="px-4 my-4 md:py-2 md:my-auto max-w-[330px] h-[100px] md:h-full w-full object-cover"
+      class="px-4 my-4 md:py-2 md:my-auto max-w-[330px] h-[300px] md:h-full w-full object-cover"
     >
-      <img src={Image} alt="blog description image" loading="lazy" />
+      <img
+        src={Image}
+        class="h-full object-cover w-full"
+        alt="blog description image"
+        loading="lazy"
+      />
     </div>
   </div>
 </div>
