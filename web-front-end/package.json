@@ -23,12 +23,15 @@
   "dependencies": {
     "@headlessui/react": "^1.6.6",
     "@heroicons/react": "^2.0.8",
+    "@mux/mux-player": "^1.11.3",
+    "@mux/mux-player-react": "^1.11.3",
     "@tailwindcss/forms": "^0.5.2",
     "@tailwindcss/typography": "^0.5.4",
     "@tanstack/react-query": "^4.7.1",
     "@types/react-query": "^1.2.9",
     "axios": "^0.27.2",
     "html-escaper": "^3.0.3",
+    "mux-embed": "^4.26.0",
     "react-query": "^3.39.2"
   }
 }
