@@ -6,7 +6,6 @@ type props = {
 }
 
 export default function App(props: props) {
-    console.log("looking for ", props.videoURL)
     return (
         <div>
             <MuxPlayer
