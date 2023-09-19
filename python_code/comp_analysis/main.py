@@ -16,17 +16,18 @@ def load_csv(file_name: str, clean_percent_names: list[str]) -> pd.DataFrame:
 def run_comp_analysis(performance_data_csv: str, auction_data_csv: str):
     performance_data_df = load_csv(performance_data_csv, ['Search overlap rate', 'Position above rate', 'Top of page rate', 'Search outranking share', 'Abs. Top of page rate', 'Search Impr. share (Auction Insights)'])
     auction_data_df = load_csv(auction_data_csv, ['Search overlap rate', 'Position above rate', 'Top of page rate', 'Search outranking share', 'Abs. Top of page rate', 'Search Impr. share (Auction Insights)'])
+    performance_data_df = performance_data_df[performance_data_df['Ca']]
     merged_data = merge_performance_auction_data(performance_data_df, auction_data_df)
     ad_group_ctr = get_corr_data(
         df=merged_data,
-        filter_keys=get_top_n(merged_data, 'Ad group ID', 10, 'Cost'),
+        filter_keys=get_top_n(merged_data, 'Ad group ID', 1000, 'Cost'),
         key_name='Ad group ID',
         metric='ctr',
         col_names_to_keep=['Campaign_x', 'Ad group_x'],
     )
     ad_group_cpa = get_corr_data(
         df=merged_data,
-        filter_keys=get_top_n(merged_data, 'Ad group ID', 10, 'Cost'),
+        filter_keys=get_top_n(merged_data, 'Ad group ID', 1000, 'Cost'),
         key_name='Ad group ID',
         metric='cpa',
         col_names_to_keep=['Campaign_x', 'Ad group_x'],
@@ -36,4 +37,4 @@ def run_comp_analysis(performance_data_csv: str, auction_data_csv: str):
 
 
 if __name__ == '__main__':
-    run_comp_analysis("../git_ignored_data/perf.csv", "../git_ignored_data/auction.csv")
+    run_comp_analysis("../git_ignored_data/pl_perf_365.csv", "../git_ignored_data/pl_auction_365.csv")
