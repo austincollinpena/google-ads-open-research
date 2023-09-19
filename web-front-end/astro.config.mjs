@@ -4,7 +4,6 @@ import react from "@astrojs/react";
 import mdx from "@astrojs/mdx";
 import image from "@astrojs/image";
 
-import critters from "astro-critters";
 
 // https://astro.build/config
 export default defineConfig({
@@ -17,6 +16,5 @@ export default defineConfig({
     react(),
     mdx(),
     image(),
-    critters(),
   ],
 });
