@@ -35,8 +35,8 @@ const posts = await Astro.glob("./**/*.mdx");
                 <h2 class="font-bold text-center">View the Research</h2>
               </SecondaryTitle>
               <NormalText ExtraClasses={"max-w-[400px]"}
-                >Open source code ready to optimize your account</NormalText
-              >
+                >Open source code ready to optimize your account
+              </NormalText>
               <a
                 href="/research"
                 class="font-bold text-white text-center bg-black px-8 py-2"
@@ -50,8 +50,8 @@ const posts = await Astro.glob("./**/*.mdx");
                 <h2 class="font-bold text-center">Request Research</h2>
               </SecondaryTitle>
               <NormalText ExtraClasses={"max-w-[400px]"}
-                >Request code to optimize an account or research on optimization</NormalText
-              >
+                >Request code to optimize an account or research on optimization
+              </NormalText>
               <NormalText>
                 <a
                   href="/request-research"
@@ -67,16 +67,18 @@ const posts = await Astro.glob("./**/*.mdx");
             </SecondaryTitle>
             <div class="max-w-[780px] px-4 mx-auto space-y-8">
               {
-                posts.map((post) => {
-                  return (
-                    <BlogCard
-                      Headline={post.frontmatter.headline}
-                      Description={post.frontmatter.description}
-                      Image={post.frontmatter.image}
-                      Link={post.url}
-                    />
-                  );
-                })
+                posts
+                  .filter((post) => post.frontmatter.bestOf !== false)
+                  .map((post) => {
+                    return (
+                      <BlogCard
+                        Headline={post.frontmatter.headline}
+                        Description={post.frontmatter.description}
+                        Image={post.frontmatter.image}
+                        Link={post.url}
+                      />
+                    );
+                  })
               }
             </div>
           </div>
