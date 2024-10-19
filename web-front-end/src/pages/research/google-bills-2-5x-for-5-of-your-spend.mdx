@@ -1,0 +1,95 @@
+---
+layout: ../../layouts/blog-explicit-prose.astro
+title: Google Bills 2x for 10% of your Max Conversions spend
+headline: Google Bills 2x for 10% of your Max Conversions spend
+description: An analysis of 8 billion clicks across 330k ad accounts
+image: "/diminshing_opteo/effect_of_removing_top_10$_of_binned_cpcs.jpg"
+publishDate: "June 7 2024"
+draft: false
+---
+
+<div class="prose prose-xl mx-4 md:mx-auto my-12">
+
+    # Google Bills 2x for 10% of your Max Conversions spend
+
+    ---
+
+    *This article was done with data from Opteo. The author has received neither incentive nor payment from Opteo at any time.*
+
+    ---
+
+    I've been curious the effect of running max conversions with zero bid cap and how that could contribute to waste. So I hit up [Guillaume](https://www.linkedin.com/in/guillaumedevinat-google-advertising-ppc-software/) at Opteo.com to answer this question:
+
+    **On average, how much wasted spend is there due to Google jacking up CPC's on Max Conversions Campaigns with target CPA's set?**
+
+    After I analyzed 330k ad accounts and 8 billion clicks I found some pretty staggering results.
+
+    At the Median, if you remove the spend from the most expensive clicks, you cut spend by 10.3% and conversions by 4.39%.
+
+    Put another way, the 10.3% of spend on your most expensive CPC's results in a cost/conversion 134% higher. If you are spending $50 per conversion. Your CAC for your highest CPC's is $117.
+
+</div>
+
+<div className={"flex"}>
+    <img className={"mx-auto"} alt={"dimishing return graph"} src={"/diminshing_opteo/effect_of_removing_top_10$_of_binned_cpcs.jpg"}/>
+</div>
+
+<div class="prose prose-xl mx-4 md:mx-auto my-12">
+
+    ## What to do?
+
+   Use a portfolio bid strategy for maximize conversions, set a portfolio bid cap, and lower your CPA goal in a campaign experiment.
+
+    Your _goal_ should be too decrease conversion volume slightly while decreasing your cost per conversion. Then put your budget to work somewhere you're not paying 134% above your target CPA.
+
+    What should your bid cap be? Maybe [Nils](https://nilsrooijmans.com/) will write a script for you, but for now [I personally use this Python code from this post.](https://googleadsopenresearch.com/research/diminishing-returns-of-max-cpc/)
+
+    You end up with a graph looking like the below which can inform what a bid cap could be. From the below graph I set a portfolio bid cap at $17.50 and found success.
+
+</div>
+
+<div class={"p-4"}>
+    <img src={"/keyword_diminishing_returns_1.png"} loading={"lazy"}/>
+</div>
+
+<div class="prose prose-xl mx-4 md:mx-auto my-12">
+    ## Why this _shouldn't_ surprise you
+
+    When you set a target CPA, Google will get conversions above your CPA and below it. Overall, it should balance out.
+
+    Below is a bell curve where I show the Z-score of CPA vs conversion volume.
+
+    To the right, we can see there's plenty of conversion volume with the CPA 4 standard deviations _above_ the mean. That's expensive.
+
+    Put more simply, when Google is getting conversions both above and below your target CPA, they _really go above it at times._ Again, it balances out.
+
+    <img src={"/diminshing_opteo/bell_curve_with_all_max_conversions_campaigns_by_cpc_bucket.png"}/>
+
+    Now let's look at the _same_ graph, just with the top 4% of highest CPC's cut (which represents 10% of spend):
+
+    <img src={"/diminshing_opteo/bell_curve_with_all_max_conversions_campaigns_by_cpc_bucket_REMOVING_top_cpc_buckets.png"}/>
+
+    You can see the distribution to the right of the mean is dramatically lower. This is just another way to visualize that, when removing spend from the highest CPC's, the distribution of conversions above your mean drop significantly.
+
+    ## Why you need to drop your CPA target along with a portfolio bid cap
+
+    Look, you think Google is going to stop wasting money _just_ because you set a portfolio bid cap?
+
+    No.
+
+    They'll find other creative ways to shove conversions on the right side of your bell curve, be it from:
+
+    - Clicks on RSA's just showing one headline that has zero commercial intent
+    - Search terms hidden from you
+    - Search terms with little to no relevance
+
+    **Google will optimize towards delivering your target CPA while maximizing their profit.**
+
+    So, if you implement a bid cap and _don't_ drop your target, Google will find another creative way to divert spend.
+
+    The trade-off is yours to manage: are you okay with a slight drop in volume, for a reasonably sized increase in efficiency?
+
+    And if given ~10% of your monthly budget back, can you put it to better use?
+
+</div>
+
