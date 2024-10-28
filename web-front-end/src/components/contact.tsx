@@ -59,7 +59,7 @@ export default function Contact(props: Props) {
   };
 
   return (
-    <div className="relative bg-white">
+    <div className="relative bg-brandNeutral">
       <div className="absolute inset-0">
         <div className="absolute inset-y-0 left-0 w-1/2 bg-brandNeutral" />
       </div>
@@ -80,7 +80,7 @@ export default function Contact(props: Props) {
                     className="h-6 w-6 flex-shrink-0 text-gray-400"
                     aria-hidden="true"
                   />
-                  <span className="ml-3">austin@googleadsopenresearch.com</span>
+                  <span className="ml-3">me@austinpena.com</span>
                 </dd>
               </div>
             </dl>
@@ -94,6 +94,7 @@ export default function Contact(props: Props) {
             </p>
           </div>
         </div>
+        {/**
         <div className="bg-white py-16 px-4 sm:px-6 lg:col-span-3 lg:py-24 lg:px-8 xl:pl-12">
           <div className="mx-auto max-w-lg lg:max-w-none">
             <form
@@ -163,6 +164,7 @@ export default function Contact(props: Props) {
             )}
           </div>
         </div>
+         **/}
       </div>
     </div>
   );
