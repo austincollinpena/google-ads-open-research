@@ -8,6 +8,14 @@ draft: false
 
 # Privacy Policy for Austin Pena LLC
 
+## Address and Contact Information
+
+Austin Pena LLC
+40 William Way, Talent Or. 97540
+me@austinpena.com / austin@googleadsopenresearch.com
+
+## Policy
+
 At googleadsopenresearch.com, accessible from googleadsopenresearch.com, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by googleadsopenresearch.com and how we use it.
 
 If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.
@@ -101,3 +109,4 @@ If you make a request, we have one month to respond to you. If you would like to
 Another part of our priority is adding protection for children while using the internet. We encourage parents and guardians to observe, participate in, and/or monitor and guide their online activity.
 
 googleadsopenresearch.com does not knowingly collect any Personal Identifiable Information from children under the age of 13. If you think that your child provided this kind of information on our website, we strongly encourage you to contact us immediately and we will do our best efforts to promptly remove such information from our records.
+
