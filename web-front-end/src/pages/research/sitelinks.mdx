@@ -1,0 +1,137 @@
+---
+layout: ../../layouts/blog-explicit-prose.astro
+title: Sitelinks
+headline: Sitelinks
+description: Sitelinks
+image: "/diminshing_opteo/effect_of_removing_top_10$_of_binned_cpcs.jpg"
+publishDate: "November 18 2025"
+draft: false
+---
+
+<div class="prose prose-xl mx-4 md:mx-auto my-12">
+
+    # Sitelink Clicks Perform 20% worse Than Headline Clicks (Unless You Do This)
+
+    ---
+
+    *This article was done with data from Opteo. The author has received neither incentive nor payment from Opteo at any time.*
+
+    ---
+
+    According to the $5 billion in spend I analyzed across hundreds of thousands of campaigns, you're (probably) wasting money on your sitelinks.
+
+    In fact, the median sitelink click has a more than 20% worse CAC than headline clicks.
+
+    The good news? I reverse engineered why 13% of sitelinks perform better than even headline clicks.
+
+</div>
+
+
+<div class="prose prose-xl mx-4 md:mx-auto my-12">
+
+    ## Sitelink Efficiency: It's not great
+
+    For all but the lowest spending campaigns, sitelink clicks tend to perform worse than headline clicks.
+
+    When binning campaigns by spend, sitelink performance starts relatively similar to regular ad headline click performance, but jumps to over _35%_ worse with the campaigns spending the most amount.
+
+</div>
+
+<div className={"flex"}>
+    <img className={"mx-auto"} alt={"dimishing return graph"} src={"/sitelinks/spend-vs-cac-roas.png"}/>
+</div>
+
+<div class="prose prose-xl mx-4 md:mx-auto my-12">
+
+    Similarly, we can see that CVR of clicks from sitelinks (right) drops significantly for higher spending campaigns.
+
+</div>
+
+<div className={"flex"}>
+    <img className={"mx-auto"} alt={"dimishing return graph"} src={"/sitelinks/spend_band_cpc_cvr.png"}/>
+</div>
+
+<div class="prose prose-xl mx-4 md:mx-auto my-12">
+    ### Cost Isn't The Enemy: Impression Share Is
+
+    When we bin campaigns by their "search exact match impression share," there's a clear trend. The closer you are to capturing the most amount of volume, the more likely your sitelinks are to be underperforming.
+
+</div>
+
+<div className={"flex"}>
+    <img className={"mx-auto"} alt={"dimishing return graph"} src={"/sitelinks/cac-vs-exact-match-is.png"}/>
+</div>
+
+<div class="prose prose-xl mx-4 md:mx-auto my-12">
+    Perhaps surprising is how CPC _drops_ the higher the search exact match impression share. The main driver of higher CAC is actually the conversion rate.
+</div>
+
+<div className={"flex"}>
+    <img className={"mx-auto"} alt={"dimishing return graph"} src={"/sitelinks/exact-match-vs-cpc-cvr.png"}/>
+</div>
+
+<div class="prose prose-xl mx-4 md:mx-auto my-12">
+
+    ## Here's How To Make Sitelinks Which Perform Even Better Than Headline Clicks
+
+    Using [rapidfuzz](https://github.com/rapidfuzz/RapidFuzz), I scored the top search terms in a campaign based on how well they matched the top 20 search terms within that campaign.
+
+    I ended up with a couple hundred million rows like this:
+
+| Search Term    | Sitelink Text             | Match Score |
+|----------------|---------------------------|-------------|
+| nyc apartments | 1 Bedroom Apartments      | 88          |
+| solar          | What Solar Costs By State | 100         |
+| send money     | Send Money to Mexico      | 100         |
+| dJ             | Wedding DJ                | 100         |
+
+
+    Then, I filtered the campaigns to only which campaigns had _both_ a sitelink which matched a search term and a sitelink which didn't match any search terms.
+
+    Using this filtered set, I analyzed which sitelinks tend to perform better.
+
+    13% of sitelinks matched a top search term in the campaign. The sitelinks which matched performed _17.1% better_ than sitelinks which didn't match search terms.
+
+</div>
+
+<div className={"flex"}>
+    <img className={"mx-auto"} alt={"dimishing return graph"} src={"/sitelinks/matched-vs-unmatched.png"}/>
+</div>
+
+
+<div class="prose prose-xl mx-4 md:mx-auto my-12">
+
+
+    What do these have in common? How can you make your own sitelinks which perform 20%+ better than headline clicks?
+
+    A sitelink which _narrows intent_ from a search term, tends to win. Let's look at the matching table again:
+
+| Search Term    | Sitelink Text             | Match Score |
+|----------------|---------------------------|-------------|
+| nyc apartments | 1 Bedroom Apartments      | 88          |
+| solar          | What Solar Costs By State | 100         |
+| send money     | Send Money to Mexico      | 100         |
+| dJ             | Wedding DJ                | 100         |
+
+
+    Someone's looking to send money. The best your ad headline can do is (probably) to say "Send Money Anywhere."
+
+    But your sitelink? Surface the likely _specific intent_ behind the vague keyword and you can win big.
+
+    ### What To Do Next
+
+    It should be overwhelmingly clear that there are issues with the conclusion:
+
+    "Drop some new sitelinks in your campaign which match search terms and see a 20%+ improvement in sitelink performance."
+
+    As someone who's run successful campaign experiments with meaningful improvements by _only_ changing sitelinks, here's what I'd recommend:
+
+    1. Only send traffic to pages which you _know_ convert. The classic mistake is to set up a sitelink pointed to an "About us" page. That doesn't work.
+    2. Start with campaign sitelinks. Have a sitelink for each major search theme. You can point all these to the same URL through using this [sitelink trick](https://www.linkedin.com/posts/nikita-soima_sitelinks-hack-in-google-ads-it-often-happens-activity-7232027456440819712-DRhR/) (I wish I could find and credit the person who originally found this, this has been a "hack" for more than a decade at least)
+    3. When you're _really_ wanting to have some fun, start adding ad group sitelinks. If you have an ad group for "1 Bedroom Apartments NYC," make sitelinks for ">$2500 1 Bdrm Apartments". Or anything else which narrows intent
+
+
+
+</div>
+
+
